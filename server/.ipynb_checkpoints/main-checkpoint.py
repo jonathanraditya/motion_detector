@@ -115,7 +115,7 @@ class VibrateProcessor(Sqlite):
         self.key = self.gethash(random.random())
         self.key = self.gethash(self.key)
         
-        self.host = '192.168.0.5'
+        self.host = '192.168.0.7'
         self.port = 5000
         
         
