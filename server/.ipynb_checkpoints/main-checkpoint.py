@@ -88,7 +88,7 @@ class VibrateProcessor(Sqlite):
             'two_entry':['left_sensor','right_sensor'],
             'one_perimeter':['carport_perimeter','large_gate','small_gate','garden_fence','garden_outer_perimeter'],
             'one_main':['parlor_window','main_door_upper','main_door_lower'],
-            'one_hallway':['hallway_door','hallway_window','kitchen_lamp_switch','outdoor_lamp_switch','parlor_lamp_switch']
+            'one_hallway':['hallway_door','hallway_window']
         }
         self.out_gb = 0
         self.out_sw = {
