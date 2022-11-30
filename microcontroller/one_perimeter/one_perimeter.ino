@@ -49,12 +49,15 @@ String key = "431f8a00bb579d4691b19efe332e21d8b61ff25e8a1698d81bf95a756660f3ee";
 String input_url = "http://192.168.0.7:5000/input?key=" + key + "&hwid=" + hwid + "&payload=";
 String output_url = "http://192.168.0.7:5000/output?key=" + key + "&hwid=" + hwid;
 
-const int pin1 = 15;
-const int pin2 = 2;
-const int pin3 = 4;
-const int pin4 = 16;
-const int pin5 = 17;
-const int pin6 = 5;
+const int pin1 = 32;
+const int pin2 = 33;
+const int pin3 = 25;
+const int pin4 = 26;
+const int pin5 = 27;
+const int pin6 = 14;
+
+// Unused pins
+const int unused_pins [] = {15,2,4,16,17,5,18,19,21,3,1,22,23,13,12,35,34,39};
 
 
 // Store sensor status
@@ -77,7 +80,7 @@ int pin6_status = 0;
 int pin6_cumulative = 0;
 String pin6_output_status = "";
 int send_data_every = 1000; // ms
-int delay_set = 5; // ms
+int delay_set = 10; // ms
 int counter = 0;
 int counter_reference = send_data_every / delay_set;
 int wifi_connection = 0;
@@ -93,6 +96,12 @@ void setup() {
   pinMode(pin4, INPUT);
   pinMode(pin5, INPUT);
   pinMode(pin6, OUTPUT);
+
+  //   Unused pin configured in output mode to prevent input
+  for (int unused_pin : unused_pins) {
+      pinMode(unused_pin, OUTPUT);
+      digitalWrite(unused_pin, LOW);
+    }
 
   WiFi.begin(ssid, password);
   Serial.println("Connecting");
