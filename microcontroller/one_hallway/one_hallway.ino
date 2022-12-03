@@ -96,6 +96,10 @@ void setup() {
   pinMode(pin4, OUTPUT);
   pinMode(pin5, OUTPUT);
   pinMode(pin6, OUTPUT);
+  digitalWrite(pin3, LOW);
+  digitalWrite(pin4, LOW);
+  digitalWrite(pin5, LOW);
+  digitalWrite(pin6, LOW);
 
   //   Unused pin configured in output mode to prevent input
   for (int unused_pin : unused_pins) {
@@ -177,44 +181,45 @@ void loop() {
       pin5_output_status = payload.substring(4,5);
       pin6_output_status = payload.substring(6,7);
 
+      int int0 = 0;
       // Pin 3 Relay update
-      if(pin3_output_status == "0"){
-        Serial.println("Pin 3 Low state (OFF)");
-        pinMode(pin3, INPUT);
+      if(pin3_output_status.toInt() == int0){
+        Serial.println("Pin 3 Relay state UNCHANGED");
+        digitalWrite(pin3, LOW);
         }
       else {
-        Serial.println("Pin 3 High state (ON)");
-        pinMode(pin3, OUTPUT);
+        Serial.println("Pin 3 Relay state CHANGED");
+        digitalWrite(pin3, HIGH);
         }
 
       // Pin 4 Relay update
-      if(pin4_output_status == "0"){
-        Serial.println("Pin 4 Low state (OFF)");
-        pinMode(pin4, INPUT);
+      if(pin4_output_status.toInt() == int0){
+        Serial.println("Pin 4 Relay state UNCHANGED");
+        digitalWrite(pin4, LOW);
         }
       else {
-        Serial.println("Pin 4 High state (ON)");
-        pinMode(pin4, OUTPUT);
+        Serial.println("Pin 4 Relay state CHANGED");
+        digitalWrite(pin4, HIGH);
         }
 
       // Pin 5 Relay update
-      if(pin5_output_status == "0"){
-        Serial.println("Pin 5 Low state (OFF)");
-        pinMode(pin5, INPUT);
+      if(pin5_output_status.toInt() == int0){
+        Serial.println("Pin 5 Relay state UNCHANGED");
+        digitalWrite(pin5, LOW);
         }
       else {
-        Serial.println("Pin 5 High state (ON)");
-        pinMode(pin5, OUTPUT);
+        Serial.println("Pin 5 Relay state CHANGED");
+        digitalWrite(pin5, HIGH);
         }
 
       // Pin 6 Relay update
-      if(pin6_output_status == "0"){
-        Serial.println("Pin 6 Low state (OFF)");
-        pinMode(pin6, INPUT);
+      if(pin6_output_status.toInt() == int0){
+        Serial.println("Pin 6 Relay state UNCHANGED");
+        digitalWrite(pin6, LOW);
         }
       else {
-        Serial.println("Pin 6 High state (ON)");
-        pinMode(pin6, OUTPUT);
+        Serial.println("Pin 6 Relay state CHANGED");
+        digitalWrite(pin6, HIGH);
         }
 
         

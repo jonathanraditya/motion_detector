@@ -96,6 +96,8 @@ void setup() {
   pinMode(pin4, INPUT);
   pinMode(pin5, INPUT);
   pinMode(pin6, OUTPUT);
+  digitalWrite(pin6, LOW);
+
 
   //   Unused pin configured in output mode to prevent input
   for (int unused_pin : unused_pins) {
@@ -180,14 +182,15 @@ void loop() {
 //      pin5_output_status = payload.substring(2,3);
 //      pin6_output_status = payload.substring(4,5);
 
+      int int0 = 0;
       // Pin 6 Relay update
-      if(pin6_output_status == "0"){
-        Serial.println("Pin 6 Low state (OFF)");
-        pinMode(pin6, INPUT);
+      if(pin6_output_status.toInt() == int0){
+        Serial.println("Pin 6 Relay state UNCHANGED");
+        digitalWrite(pin6, LOW);
         }
       else {
-        Serial.println("Pin 6 High state (ON)");
-        pinMode(pin6, OUTPUT);
+        Serial.println("Pin 6 Relay state CHANGED");
+        digitalWrite(pin6, HIGH);
         }
       }
     else {
