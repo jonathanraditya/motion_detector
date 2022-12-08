@@ -59,14 +59,14 @@ class Sqlite(GlobalOperations):
                 cols_insert = ','.join(cols_all)
                 data_placeholder_insert = ','.join(data_placeholders)
                 values_insert = ','.join(values_all)
-                print(values_insert)
+                # print(values_insert)
                 col_dtypes_bind_insert = ','.join(col_dtypes_bind)
                 
                 # Create table if not exists
                 self.create_table(col_dtypes_bind_insert)
                 
                 sql = f'''insert into {self.table} ({cols_insert}) values ({data_placeholder_insert})'''
-                print(sql)
+                # print(sql)
                 cur = self.conn.cursor()
                 cur.execute(sql, values_all)
                 self.conn.commit()
@@ -129,36 +129,36 @@ class Vibrateserver(BaseHTTPRequestHandler, VibrateProcessor):
         path = urlparse(self.path).path
         vp = VibrateProcessor()
         
-        print('zero')
+        # print('zero')
         if 'key' in qs.keys() and 'hwid' in qs.keys():
-            print('a')
+            # print('a')
             hwid = qs['hwid'][0]
             if qs['key'][0] == vp.key:
-                print('b')
+                # print('b')
                 # Input handler
                 if path == '/input':
-                    print('c')
+                    # print('c')
                     if hwid in vp.in_sw.keys():
-                        print('d')
+                        # print('d')
                         payload_split = qs['payload'][0].split('z')
                         if len(payload_split) == len(vp.in_sw[hwid]):
-                            print('e')
+                            # print('e')
                             self.send_response(200)
                             self.send_header('Content-type', 'text/html')
                             self.end_headers()
                             self.set_table(hwid)
                             self.create_connection(vp.db_path)
-                            print(vp.in_sw[hwid])
-                            print(payload_split)
-                            print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-                            print(hwid)
+                            # print(vp.in_sw[hwid])
+                            # print(payload_split)
+                            # print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+                            # print(hwid)
                             self.insert_value(vp.in_sw[hwid], payload_split)
 
                 # Output handler
                 elif path == '/output':
-                    print('f')
+                    # print('f')
                     if hwid in vp.out_sw.keys():
-                        print('g')
+                        # print('g')
                         self.send_response(200)
                         self.send_header('Content-type', 'text/html')
                         self.end_headers()
@@ -167,7 +167,7 @@ class Vibrateserver(BaseHTTPRequestHandler, VibrateProcessor):
                         
                         self.wfile.write(bytes(output_csv, 'utf-8'))        
                         
-        print('last')
+        # print('last')
             
             
 if __name__ == '__main__':
