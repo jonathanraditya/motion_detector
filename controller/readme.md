@@ -15,3 +15,5 @@ Three urlhost to pass (one for each capture server):
 - 192.168.0.207 -> hallway
 - 192.168.0.208 -> garden
 
+## `capture_restructurer.ipynb`
+Move, rename, and restructure saved image produced by `webcapture.ipynb`
