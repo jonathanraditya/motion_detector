@@ -17,3 +17,8 @@ Three urlhost to pass (one for each capture server):
 
 ## `capture_restructurer.ipynb`
 Move, rename, and restructure saved image produced by `webcapture.ipynb`
+
+Behaviour:
+- outer_fence: very slow update speed (0.001 alpha?) (21,21) gaussian. same threshold
+- garden: fast update to adapt with new object position (0.1/0.25 alpha?) (35,35) gaussian. Filter >50. same threshold
+- hallway: same option as garden. high filter if many activities. Use low filter in night time. Filter = threshold
