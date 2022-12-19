@@ -1,2 +1,5 @@
 # Db takes up space
-.db
+*.db
+*.log
+.ipynb_checkpoints
+__pycache__/
