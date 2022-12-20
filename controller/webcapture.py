@@ -15,6 +15,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
+from selenium.common.exceptions import TimeoutException
 # import selenium.common.exceptions.WebDriverException
 
 capture_interval = 1 #second(s)
@@ -54,43 +55,43 @@ if __name__ == "__main__":
         with webdriver.Firefox(service=service, options=options) as driver:
 
             wait = WebDriverWait(driver, wait_timeout)
-            driver.get(f"http://{urlhost}/")
-
-            # Relogin every start of capture session
             while True:
-                # Login page
-                wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button')))
-                driver.find_element('id', 'username').send_keys('admin')
-                driver.find_element('id', 'password').send_keys('Valerian@live1')
-                driver.find_element('xpath', '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button').click()    
-                print(f'Login success at {urlhost}')
+                try:
+                    print(f'Connecting to: http://{urlhost}/')
+                    driver.get(f"http://{urlhost}/")
 
-                # Capture button
-                print(f'Capturing frames at {urlhost}...')
-                wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div[2]/div/div[2]/span/button[3]')))
-                for _ in trange(capture_per_session):
-                    wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div[2]/div/div[2]/span/button[3]')))
-                    driver.find_element('xpath', '/html/body/div[4]/div[2]/div/div[2]/span/button[3]').click()
-                    time.sleep(capture_interval)
+                    # Relogin every start of capture session
+                    while True:
+                        # Login page
+                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button')))
+                        driver.find_element('id', 'username').send_keys('admin')
+                        driver.find_element('id', 'password').send_keys('Valerian@live1')
+                        driver.find_element('xpath', '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button').click()    
+                        print(f'Login success at {urlhost}')
 
-                # Logout session
-                # Logout button on main frame
-                wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[2]/div[5]')))
-                driver.find_element('xpath', '/html/body/div[2]/div/div[2]/div[5]').click()
-                # Popup confirmation
-                wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]')))
-                driver.find_element('xpath', '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]').click()
-                print('End of capture session. Reloggin...')
+                        # Capture button
+                        print(f'Capturing frames at {urlhost}...')
+                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div[2]/div/div[2]/span/button[3]')))
+                        for _ in trange(capture_per_session):
+                            wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div[2]/div/div[2]/span/button[3]')))
+                            driver.find_element('xpath', '/html/body/div[4]/div[2]/div/div[2]/span/button[3]').click()
+                            time.sleep(capture_interval)
+
+                        # Logout session
+                        # Logout button on main frame
+                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[2]/div[5]')))
+                        driver.find_element('xpath', '/html/body/div[2]/div/div[2]/div[5]').click()
+                        # Popup confirmation
+                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]')))
+                        driver.find_element('xpath', '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]').click()
+                        print('End of capture session. Reloggin...')
+                except TimeoutException:
+                    print(f'Request timeout. Wait for {wait_timeout}s.')
+                    time.sleep(wait_timeout)
 
     except KeyboardInterrupt:
         print(f'Stopping Hikvision capture server at {urlhost}')
         pass
-
-
-# In[18]:
-
-
-os.getlogin()
 
 
 # In[ ]:

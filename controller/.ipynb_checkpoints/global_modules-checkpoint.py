@@ -75,6 +75,68 @@ class Sqlite(GlobalOperations):
                 print('Makesure that colnames is in python list format `[...,...,...]`')
         else:
             print('Please initialize connection and table name first.')
+            
+class Sqlite_v2(GlobalOperations):
+    '''Version 2
+    This version is slightly different with vibration_sensor/server version,
+            especially in insert_value function.'''
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.conn = None
+        self.table = None
+        
+    def set_table(self, table):
+        self.table = table
+        
+    def create_connection(self, db_path):
+        try:
+            self.conn = sqlite3.connect(db_path)
+            cur = self.conn.cursor()
+            # Enable Write Ahead Logging
+            cur.execute('PRAGMA journal_mode=wal')
+        except Error as e:
+            print(f'Failed to create connection. {e}')
+    
+    def create_table(self, col_dtypes):
+        if isinstance(self.table, str) & isinstance(col_dtypes, list):
+            sql = f'''create table if not exists {self.table} ({col_dtypes})'''
+            cur = self.conn.cursor()
+            cur.execute(sql)
+        else:
+            print('Define self.table first and or recheck col_dtypes is in list type.')
+            
+    
+    def insert_value(self, cols, values, dtypes):            
+        if isinstance(self.conn, sqlite3.Connection) & isinstance(self.table, str):
+            if all(isinstance(i, list) for i in [cols, values, dtypes]):
+                cols_all = []
+                data_placeholders = []
+                values_all = []
+                col_dtypes_bind = []
+                
+                for i, col in enumerate(cols):
+                    cols_all.append(col)
+                    data_placeholders.append('?')
+                    values_all.append(values[i])
+                    col_dtypes_bind.append(f'{col} {dtypes[i]}')
+                      
+                cols_insert = ','.join(cols_all)
+                data_placeholder_insert = ','.join(data_placeholders)
+                values_insert = ','.join(values_all)
+                col_dtypes_bind_insert = ','.join(col_dtypes_bind)
+                
+                # Create table if not exists
+                self.create_table(col_dtypes_bind_insert)
+                
+                sql = f'''insert into {self.table} ({cols_insert}) values ({data_placeholder_insert})'''
+                # print(sql)
+                cur = self.conn.cursor()
+                cur.execute(sql, values_all)
+                self.conn.commit()
+            else:
+                print('Makesure that colnames is in python list format `[...,...,...]`')
+        else:
+            print('Please initialize connection and table name first.')
     
 class VibrateProcessor(Sqlite):
     def __init__(self, *args, **kwargs):
