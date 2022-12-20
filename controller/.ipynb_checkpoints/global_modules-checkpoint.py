@@ -33,7 +33,7 @@ class Sqlite(GlobalOperations):
     def create_connection(self, db_path):
         try:
             self.conn = sqlite3.connect(db_path)
-        except Error as e:
+        except sqlite3.Error as e:
             print(f'Failed to create connection. {e}')
     
     def create_table(self, col_dtypes):
@@ -98,7 +98,7 @@ class Sqlite_v2(GlobalOperations):
             print(f'Failed to create connection. {e}')
     
     def create_table(self, col_dtypes):
-        if isinstance(self.table, str) & isinstance(col_dtypes, list):
+        if isinstance(self.table, str) & isinstance(col_dtypes, str):
             sql = f'''create table if not exists {self.table} ({col_dtypes})'''
             cur = self.conn.cursor()
             cur.execute(sql)
@@ -124,6 +124,8 @@ class Sqlite_v2(GlobalOperations):
                 data_placeholder_insert = ','.join(data_placeholders)
                 values_insert = ','.join(values_all)
                 col_dtypes_bind_insert = ','.join(col_dtypes_bind)
+                # print(col_dtypes_bind)
+                # print(col_dtypes_bind_insert)
                 
                 # Create table if not exists
                 self.create_table(col_dtypes_bind_insert)

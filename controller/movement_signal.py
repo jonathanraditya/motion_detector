@@ -31,6 +31,10 @@ if __name__ == '__main__':
     label = main(sys.argv[1:])
     print(f'Starting movement signal server at {label}')
     
+    param_sw = {'outer_fence':[(21,21),0.001],
+                'garden':[(35,35),0.25],
+                'hallway':[(35,35),0.25]}
+    
     root_path = os.getcwd()
     cache_path = os.path.join(root_path, 'cache')
     captured_frames_path = os.path.join(cache_path, 'captured_frames')
@@ -41,23 +45,23 @@ if __name__ == '__main__':
     movements_path = os.path.join(cache_path, 'movements')
     average_value_path = os.path.join(movements_path, 'average_value')
     average_value_label_path = os.path.join(average_value_path, label)
-    os.makedirs(average_value_label_path)
+    os.makedirs(average_value_label_path, exist_ok=True)
     average_value_list = os.listdir(average_value_label_path)
     average_value_latest = average_value_list[-1] if average_value_list != [] else False
 
     # Readings cache
     readings_path = os.path.join(movements_path, 'readings')
     readings_label_path = os.path.join(readings_path, label)
-    os.makedirs(readings_label_path)
+    os.makedirs(readings_label_path, exist_ok=True)
 
     # Readings db
     db_path = os.path.join(root_path, 'db')
     readings_db = os.path.join(db_path, 'movement_signal.db')
     sqlite = Sqlite_v2()
-    sqlite.set_table('label')
+    sqlite.set_table(label)
     sqlite.create_connection(readings_db)
     readings_db_cols = ['timestamp','value']
-    readings_db_dtypes = ['float','int']
+    readings_db_dtypes = ['text','text']
 
     try:
         while True:
@@ -67,25 +71,39 @@ if __name__ == '__main__':
             # Get updated progress
             hotstart = True
             average_value_list = os.listdir(average_value_label_path)
-            average_value_latest = average_value_list[-1] if average_value_list != [] else False
+            # average_value_latest = average_value_list[-1] if average_value_list != [] else False
+            if average_value_list != []:
+                avl_float = [float(i.replace('.hdf5','')) for i in average_value_list]
+                avl_float.sort(reverse=True) # descending, highest value first
+                average_value_latest = f'{avl_float[0]}.hdf5'
+                # print(average_value_latest)
+            else:
+                average_value_latest = False
             
             for filename in source_list:
                 if average_value_latest and hotstart:
-                    if (filename.replace('.jpg','') != average_value_latest.replace('.hdf5','')):
+                    if (float(filename.replace('.jpg','')) <= float(average_value_latest.replace('.hdf5',''))):
                         continue
-                    elif (filename.replace('.jpg','') != average_value_latest.replace('.hdf5','')):
+                    else:
                         average_value_latest_path = os.path.join(average_value_label_path, average_value_latest)
                         with h5py.File(average_value_latest_path, 'r') as f:
-                            average_value = f[()]['average_value']
+                            average_value = f['average_value'][()]
                         hotstart = False
-                elif average_value_latest == []:
+                elif not average_value_latest and hotstart:
+                    moving_avg_path = os.path.join(source_path, filename)
+                    img = cv2.imread(moving_avg_path, cv2.IMREAD_GRAYSCALE)
+                    img_blurred = cv2.GaussianBlur(img, param_sw[label][0],0)
                     average_value = np.float32(img_blurred)
+                    hotstart = False
+                    
+                if hotstart:
+                    continue
 
                 moving_avg_path = os.path.join(source_path, filename)
                 img = cv2.imread(moving_avg_path, cv2.IMREAD_GRAYSCALE)
-                img_blurred = cv2.GaussianBlur(img, (35,35),0)
+                img_blurred = cv2.GaussianBlur(img, param_sw[label][0],0)
 
-                cv2.accumulateWeighted(img_blurred, average_value, 0.25)
+                cv2.accumulateWeighted(img_blurred, average_value, param_sw[label][1])
 
                 running_average = cv2.convertScaleAbs(average_value)
                 diff = cv2.absdiff(running_average, img_blurred)
@@ -101,7 +119,7 @@ if __name__ == '__main__':
                     f.write(str(high_value_count)) 
 
                 # Store value to db
-                readings_db_values = [float(filename.replace('.jpg','')), int(high_value_count)]
+                readings_db_values = [str(filename.replace('.jpg','')), str(high_value_count)]
                 sqlite.insert_value(readings_db_cols, readings_db_values, readings_db_dtypes)
 
                 # Create checkpoint of image average_value every x times. Store with timestamp
@@ -113,11 +131,17 @@ if __name__ == '__main__':
                 # Keep last 10 checkpoint
                 average_value_list = os.listdir(average_value_label_path)
                 if len(average_value_list) > 10:
-                    for fn in average_value_list[:len(average_value_list) - 10]:
-                        average_value_todelete = os.path.join(average_value_label_path, fn)
+                    
+                    avl_float = [float(i.replace('.hdf5','')) for i in average_value_list]
+                    avl_float.sort(reverse=False) # ascending, oldest value first
+                    # print(avl_float)
+                        
+                    for fn in avl_float[:len(avl_float) - 10]:
+                        average_value_todelete = os.path.join(average_value_label_path, f'{fn}.hdf5')
                         if os.path.isfile(average_value_todelete):
                             os.remove(average_value_todelete)
                             
+            print("Waiting for new data...")
             time.sleep(2)
     
     except KeyboardInterrupt:

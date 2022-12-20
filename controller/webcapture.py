@@ -30,7 +30,7 @@ driver_bin_path = os.path.join(bin_path, 'geckodriver.exe')
 
 options = Options()
 options.binary_location = browser_bin_path
-service = Service(driver_bin_path)
+service = Service(executable_path=driver_bin_path, log_path=os.devnull)
 
 def main(argv):
     opts, args = getopt.getopt(argv, "hu:")
