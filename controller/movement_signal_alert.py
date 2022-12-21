@@ -81,7 +81,7 @@ if __name__ == '__main__':
                 
             time.sleep(0.5)
     except KeyboardInterrupt:
-        print(f'Stopping movement signal server at {label}')
+        print(f'Stopping movement signal alert server at {label}')
         pass
         
 
