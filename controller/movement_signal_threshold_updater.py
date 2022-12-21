@@ -51,8 +51,9 @@ if __name__ == '__main__':
         while True:
             df = pd.read_sql(f'select * from {label} order by ROWID desc limit {data_limit}', sqlite.conn)
             df['value'] = df['value'].astype('int')
-            filtered_1std = df.loc[df['value'] > (df['value'].mean() + df['value'].std())]
-            threshold = filtered_1std['value'].mean() + filtered_1std['value'].std()
+            threshold = df['value'].mean() + 1*df['value'].std()
+            # filtered_1std = df.loc[df['value'] > (df['value'].mean() + df['value'].std())]
+            # threshold = filtered_1std['value'].mean() + filtered_1std['value'].std()
             timestamp = df.iloc[0]['timestamp']
 
             # Store threshold
@@ -78,8 +79,76 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print(f'Stopping movement signal threshold server at {label}')
         pass
-    
-    
+
+
+# In[77]:
+
+
+# import pandas as pd
+# from global_modules import Sqlite
+# import os
+# import sys, getopt
+# import time
+# import numpy as np
+
+# label = 'hallway'
+
+# root_path = os.getcwd()
+# db_path = os.path.join(root_path, 'db')
+# movement_signal_db_path = os.path.join(db_path, 'movement_signal.db')
+
+# # Constants
+# capture_rate = 1.65 #seconds
+# data_limit = int(24 * 60 * 60 / capture_rate) # 24hrs * 60mins * 60secs, a day in seconds
+
+# # Database initialization
+# sqlite = Sqlite()
+# sqlite.set_table(label)
+# sqlite.create_connection(movement_signal_db_path)
+
+# df = pd.read_sql(f'select * from {label} order by ROWID desc limit {data_limit}', sqlite.conn)
+# df['value'] = df['value'].astype('int')
+# filtered_1std = df.loc[df['value'] > (df['value'].mean() + df['value'].std())]
+# threshold = filtered_1std['value'].mean() + filtered_1std['value'].std()
+# timestamp = df.iloc[0]['timestamp']
+
+
+# In[78]:
+
+
+# Q1 = np.percentile(df['value'], 25, interpolation='midpoint')
+# Q2 = np.percentile(df['value'], 50, interpolation='midpoint')
+# Q3 = np.percentile(df['value'], 75, interpolation='midpoint')
+
+
+# In[79]:
+
+
+# threshold
+
+
+# In[80]:
+
+
+# df['value'].median() + 1*df['value'].std()
+
+
+# In[81]:
+
+
+# filtered_1std
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:

@@ -24,11 +24,13 @@ if __name__ == '__main__':
             root_path = os.getcwd()
             cache_path = os.path.join(root_path, 'cache')
             notifications_path = os.path.join(cache_path, 'notifications')
+            os.makedirs(notifications_path, exist_ok=True)
             notifications_label_list = os.listdir(notifications_path)
 
             captured_frames_path = os.path.join(cache_path, 'captured_frames')
             
-            proof_path = os.path.join(cache_path, 'proof')
+            deception_path = os.path.join(cache_path, 'deception')
+            os.makedirs(deception_path, exist_ok=True)
             
             db_path = os.path.join(root_path, 'db')
             notifications_db = os.path.join(db_path, 'notifications.db')
@@ -43,6 +45,7 @@ if __name__ == '__main__':
 
             for notification_label in notifications_label_list:
                 notifications_label_path = os.path.join(notifications_path, notification_label)
+                os.makedirs(notifications_label_path, exist_ok=True)
 
                 notifications_list = os.listdir(notifications_label_path)
                 nl_float = [float(i.replace('.cache','')) for i in notifications_list]
@@ -82,9 +85,16 @@ if __name__ == '__main__':
                         captured_frames_img.close()
                         
                     # Store to proofing server
-                    proof_path_fn =  os.path.join(proof_path, notification_fn)
+                    proof_label_path = os.path.join(proof_path, notification_label)
+                    os.makedirs(proof_label_path, exist_ok=True)
+                    proof_path_fn =  os.path.join(proof_label_path, notification_fn)
                     with open(proof_path_fn, 'w') as f:
                         f.write(sha256)
+                        
+                    # Store to deception server
+                    deception_path_fn = os.path.join(deception_path, notification_fn) 
+                    with open(deception_path_fn, 'w') as f:
+                        f.write('0')
                         
                     # Store to db
                     notifications_db_values = [notification_fn.replace('.cache',''), sha256, '0', notification_label]
