@@ -39,7 +39,9 @@ if __name__ == '__main__':
     
     # Constants
     capture_rate = 1.65 #seconds
-    data_limit = int(24 * 60 * 60 / capture_rate) # 24hrs * 60mins * 60secs, a day in seconds
+    # 24hrs * 60mins * 60secs, a day in seconds (old value)
+    # 1hr * 5mins * 60secs, a day in seconds
+    data_limit = int(1 * 5 * 60 / capture_rate) 
     
     # Database initialization
     sqlite = Sqlite()
@@ -51,7 +53,7 @@ if __name__ == '__main__':
         while True:
             df = pd.read_sql(f'select * from {label} order by ROWID desc limit {data_limit}', sqlite.conn)
             df['value'] = df['value'].astype('int')
-            threshold = df['value'].mean() + 1*df['value'].std()
+            threshold = df['value'].mean() + 3*df['value'].std()
             # filtered_1std = df.loc[df['value'] > (df['value'].mean() + df['value'].std())]
             # threshold = filtered_1std['value'].mean() + filtered_1std['value'].std()
             timestamp = df.iloc[0]['timestamp']
@@ -73,8 +75,8 @@ if __name__ == '__main__':
                     if os.path.isfile(threshold_value_todelete):
                         os.remove(threshold_value_todelete)
 
-            print('Waiting for new data...')
-            time.sleep(60)
+            print(f"movement_signal_threshold_updater.py -l {label} is waiting for new data...")
+            time.sleep(10)
     
     except KeyboardInterrupt:
         print(f'Stopping movement signal threshold server at {label}')

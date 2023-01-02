@@ -64,8 +64,14 @@ if __name__ == '__main__':
 
             for reading_fn in readings_list_ff:
                 reading_path = os.path.join(readings_label_path, reading_fn)
-                with open(reading_path, 'r') as f:
-                    reading = int(f.read())
+                try:
+                    with open(reading_path, 'r') as f:
+                        reading = int(f.read())
+                except ValueError:
+                    print("Value error. Assume 0 reading value.")
+                    reading = 0
+                    with open(reading_path, 'w') as f:
+                        f.write(str(0))
 
                 if reading > threshold:
                     notifications_path = os.path.join(notifications_label_path, reading_fn)

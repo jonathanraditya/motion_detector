@@ -76,13 +76,20 @@ if __name__ == '__main__':
 
                     # Send Messages
                     for CHAT_ID in CHAT_IDS:
-                        captured_frames_img = open(captured_frames_img_path_cache, 'rb')
-                        files = {'photo': captured_frames_img}
-                        send_message = f'https://api.telegram.org/bot{TOKEN}/sendPhoto?chat_id={CHAT_ID}&caption={caption}'
-                        response = requests.get(send_message, files=files)
-                        # print(response.content)
-                        # print(f'Sent to: {CHAT_ID}')
-                        captured_frames_img.close()
+                        sent = False
+                        while not sent:
+                            try:
+                                captured_frames_img = open(captured_frames_img_path_cache, 'rb')
+                                files = {'photo': captured_frames_img}
+                                send_message = f'https://api.telegram.org/bot{TOKEN}/sendPhoto?chat_id={CHAT_ID}&caption={caption}'
+                                response = requests.get(send_message, files=files)
+                                # print(response.content)
+                                # print(f'Sent to: {CHAT_ID}')
+                                captured_frames_img.close()
+                                sent = True
+                            except requests.exceptions.RequestException as e:
+                                print(f'{e} Trying to send notification. Wait for 5 seconds.')
+                                time.sleep(5)
                         
                     # Store to proofing server
                     proof_label_path = os.path.join(proof_path, notification_label)
@@ -101,7 +108,10 @@ if __name__ == '__main__':
                     sqlite.insert_value(notifications_db_cols, notifications_db_values, notifications_db_dtypes)
                         
                     # Clear cache
-                    os.remove(captured_frames_img_path_cache)
+                    try:
+                        os.remove(captured_frames_img_path_cache)
+                    except PermissionError:
+                        print(f'Failed to remove {captured_frames_img_path_cache}')
                     os.remove(notification_path)
                     
             #         break

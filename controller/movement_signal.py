@@ -31,7 +31,8 @@ if __name__ == '__main__':
     label = main(sys.argv[1:])
     print(f'Starting movement signal server at {label}')
     
-    param_sw = {'outer_fence':[(21,21),0.001],
+    # Old outer_fence value: [(21,21),0.001]
+    param_sw = {'outer_fence':[(35,35),0.25],
                 'garden':[(35,35),0.25],
                 'hallway':[(35,35),0.25]}
     
@@ -67,6 +68,9 @@ if __name__ == '__main__':
         while True:
             # Get updated source list
             source_list = os.listdir(source_path)
+            source_list_fl = [float(i.replace('.jpg','')) for i in source_list]
+            source_list_fl.sort(reverse=False) # ascending, lowest value first
+            source_list = [i for _, i in sorted(zip(source_list_fl, source_list))]
             
             # Get updated progress
             hotstart = True
@@ -101,7 +105,15 @@ if __name__ == '__main__':
 
                 moving_avg_path = os.path.join(source_path, filename)
                 img = cv2.imread(moving_avg_path, cv2.IMREAD_GRAYSCALE)
-                img_blurred = cv2.GaussianBlur(img, param_sw[label][0],0)
+                
+                try:
+                    img_blurred = cv2.GaussianBlur(img, param_sw[label][0],0)
+                except cv2.error as e:
+                    print(e)
+                    print('Removing troubled files and continue...')
+                    print(moving_avg_path)
+                    os.remove(moving_avg_path)
+                    continue
 
                 cv2.accumulateWeighted(img_blurred, average_value, param_sw[label][1])
 
@@ -141,7 +153,7 @@ if __name__ == '__main__':
                         if os.path.isfile(average_value_todelete):
                             os.remove(average_value_todelete)
                             
-            print("Waiting for new data...")
+            print(f"movement_signal.py -l {label} is waiting for new data...")
             time.sleep(2)
     
     except KeyboardInterrupt:

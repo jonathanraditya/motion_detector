@@ -7,3 +7,5 @@ cache/
 db/
 geckodriver.log
 proof/
+*.jpg
+!image_not_found.jpg
