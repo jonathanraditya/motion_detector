@@ -96,21 +96,26 @@ MICROSERVICES
         - delete file in cache/proof/
 '''
 
+DEPLOYMENT:
+- Make sure firefox installed in "C:\Program Files\Mozilla Firefox\firefox.exe'"
+- Make sure geckodriver.exe exist in controller/bin/geckodriver.exe
+- create env and update dependencies from /conda_env
+
 Command to run:
-- python webcapture.py -u "192.168.0.170"
-- python webcapture.py -u "192.168.0.207"
-- python webcapture.py -u "192.168.0.208"
-- python capture_restructurer.py
-- movement_signal.py -l "outer_fence"
-- movement_signal.py -l "hallway"
-- movement_signal.py -l "garden"
-- movement_signal_threshold_updater.py -l "outer_fence"
-- movement_signal_threshold_updater.py -l "hallway"
-- movement_signal_threshold_updater.py -l "garden"
-- movement_signal_alert.py -l "outer_fence"
-- movement_signal_alert.py -l "hallway"
-- movement_signal_alert.py -l "garden"
-- notifications.py
-- proof.py
-- cleanup.py
+- python webcapture.py -u "192.168.0.170" (selenium)
+- python webcapture.py -u "192.168.0.207" (selenium)
+- python webcapture.py -u "192.168.0.208" (selenium)
+- python capture_restructurer.py (base)
+- movement_signal.py -l "outer_fence" (cv2)
+- movement_signal.py -l "hallway" (cv2)
+- movement_signal.py -l "garden" (cv2)
+- movement_signal_threshold_updater.py -l "outer_fence" (base)
+- movement_signal_threshold_updater.py -l "hallway" (base)
+- movement_signal_threshold_updater.py -l "garden" (base)
+- movement_signal_alert.py -l "outer_fence" (base)
+- movement_signal_alert.py -l "hallway" (base)
+- movement_signal_alert.py -l "garden" (base)
+- notifications.py (base)
+- proof.py (base)
+- cleanup.py (base)
 
