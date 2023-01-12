@@ -83,7 +83,7 @@ if __name__ == '__main__':
                     with open(reading_path, 'r') as f:
                         reading = int(f.read())
                 except ValueError:
-                    print(f"movement_signal_alert.py -l "{label}" Value error. Assume 0 reading value.")
+                    print(f'movement_signal_alert.py -l "{label}" Value error. Assume 0 reading value.')
                     reading = 0
                     with open(reading_path, 'w') as f:
                         f.write(str(0))
