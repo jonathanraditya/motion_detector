@@ -89,7 +89,7 @@ if __name__ == "__main__":
                 except TimeoutException:
                     print(f'webcapture.py -u "{urlhost}" Request timeout. Wait for {wait_timeout}s.')
                     time.sleep(wait_timeout)
-                except ElementClickInterceptedException, WebDriverException:
+                except (ElementClickInterceptedException, WebDriverException):
                     # WebDriverException:
                     # Connection to the server was reset while the page was loading
                     #
