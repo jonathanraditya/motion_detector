@@ -6,6 +6,7 @@
 
 import os
 import time
+from global_modules import GlobalOperations
 from datetime import datetime, timedelta
 
 if __name__ == '__main__':
@@ -14,6 +15,8 @@ if __name__ == '__main__':
     cache_path = os.path.join(root_path, 'cache')
     captured_frames_path = os.path.join(cache_path, 'captured_frames')
     os.makedirs(captured_frames_path, exist_ok=True)
+    
+    go = GlobalOperations()
     
     keep_records_for = 2 # day
     date_threshold = (datetime.now() - timedelta(hours=24)).timestamp()
@@ -30,10 +33,11 @@ if __name__ == '__main__':
                         captured_frames_list_path = os.path.join(captured_frames_label_path, captured_frames_fn)
                         os.remove(captured_frames_list_path)
 
-            time.sleep(15)
+            print(f'Finish cleanup at {go.datetime_now()}')
+            time.sleep(60*60) # 1 hour
 
         except KeyboardInterrupt:
-            print(f'Stopping cleanup server')
+            print(f'Stopping cleanup server at {go.datetime_now()}')
             pass
 
 

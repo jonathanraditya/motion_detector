@@ -12,6 +12,7 @@ import numpy as np
 import h5py
 import sys, getopt
 from global_modules import Sqlite_v2
+import sqlite3
 
 def main(argv):
     opts, args = getopt.getopt(argv, "hl:")
@@ -132,7 +133,17 @@ if __name__ == '__main__':
 
                 # Store value to db
                 readings_db_values = [str(filename.replace('.jpg','')), str(high_value_count)]
-                sqlite.insert_value(readings_db_cols, readings_db_values, readings_db_dtypes)
+                insert_in_progress = True
+                while insert_in_progress:
+                    try:
+                        sqlite.insert_value(readings_db_cols, readings_db_values, readings_db_dtypes)
+                        insert_in_progress = False
+                    except sqlite3.OperationalError as e:
+                        print(f'movement_signal.py -l {label} Insertion error. Trying to reinitiate sqlite object. {e}')
+                        del sqlite
+                        sqlite = Sqlite_v2()
+                        sqlite.set_table(label)
+                        sqlite.create_connection(readings_db)        
 
                 # Create checkpoint of image average_value every x times. Store with timestamp
                 # Restart from that point.

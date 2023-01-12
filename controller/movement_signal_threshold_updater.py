@@ -76,7 +76,7 @@ if __name__ == '__main__':
                         os.remove(threshold_value_todelete)
 
             print(f"movement_signal_threshold_updater.py -l {label} is waiting for new data...")
-            time.sleep(10)
+            time.sleep(60)
     
     except KeyboardInterrupt:
         print(f'Stopping movement signal threshold server at {label}')

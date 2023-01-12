@@ -16,7 +16,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 from selenium.common.exceptions import TimeoutException
-# import selenium.common.exceptions.WebDriverException
+from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.common.exceptions import WebDriverException
 
 capture_interval = 1 #second(s)
 live_for = 240 #second(s), server lived for
@@ -86,8 +87,18 @@ if __name__ == "__main__":
                         driver.find_element('xpath', '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]').click()
                         print('End of capture session. Reloggin...')
                 except TimeoutException:
-                    print(f'Request timeout. Wait for {wait_timeout}s.')
+                    print(f'webcapture.py -u "{urlhost}" Request timeout. Wait for {wait_timeout}s.')
                     time.sleep(wait_timeout)
+                except ElementClickInterceptedException, WebDriverException:
+                    # WebDriverException:
+                    # Connection to the server was reset while the page was loading
+                    #
+                    # ElementClickInterceptedException:
+                    # Element <div class="exit"> is not clickable at point (642,153) 
+                    #   because another element <div id="plugin" 
+                    #   class="layout-center-inner ui-layout-pane ui-layout-pane-center ng-scope"> 
+                    #   obscures it
+                    print(f'webcapture.py -u "{urlhost}" ElementClickInterceptedException or WebDriverException. Wait for {wait_timeout}s and retrying from login page.')
 
     except KeyboardInterrupt:
         print(f'Stopping Hikvision capture server at {urlhost}')
