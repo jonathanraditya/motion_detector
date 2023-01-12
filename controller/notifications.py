@@ -75,7 +75,7 @@ if __name__ == '__main__':
                 with open(notification_path, 'r') as f:
                     caption = f.read()
 
-                captured_frames_label_path = os.path.join(captured_frames_path, notification_label)
+                captured_frames_label_path = os.path.join(captured_frames_path, label)
                 captured_frames_img_path = os.path.join(captured_frames_label_path, notification_fn.replace('.cache','.jpg'))
                 captured_frames_img_path_cache = os.path.join(root_path, f'a{sha256}.jpg')
 
@@ -107,7 +107,7 @@ if __name__ == '__main__':
                             time.sleep(5)
 
                 # Store to proofing server
-                proof_label_path = os.path.join(proof_path, notification_label)
+                proof_label_path = os.path.join(proof_path, label)
                 os.makedirs(proof_label_path, exist_ok=True)
                 proof_path_fn =  os.path.join(proof_label_path, notification_fn)
                 with open(proof_path_fn, 'w') as f:
@@ -119,7 +119,7 @@ if __name__ == '__main__':
                     f.write('0')
 
                 # Store to db
-                notifications_db_values = [notification_fn.replace('.cache',''), sha256, '0', notification_label]
+                notifications_db_values = [notification_fn.replace('.cache',''), sha256, '0', label]
                 sqlite.insert_value(notifications_db_cols, notifications_db_values, notifications_db_dtypes)
 
                 # Clear cache
