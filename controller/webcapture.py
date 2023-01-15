@@ -8,7 +8,7 @@ import os
 import time
 import sys, getopt
 from tqdm import trange
-from global_modules import GlobalOpertions
+from global_modules import GlobalOperations
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
