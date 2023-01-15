@@ -33,7 +33,9 @@ if __name__ == '__main__':
                         os.remove(captured_frames_list_path)
 
             print(f'{go.datetime_now()} Cleanup finished.')
-            time.sleep(60*60) # 1 hour
+            for _ in range(60*60):
+                # 1 hour
+                time.sleep(1) 
 
         except KeyboardInterrupt:
             print(f'{go.datetime_now()} Cleanup server stopped.')
