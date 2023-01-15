@@ -11,8 +11,9 @@ import os
 import numpy as np
 import h5py
 import sys, getopt
-from global_modules import Sqlite_v2
+from global_modules import Sqlite_v2, GlobalOperations
 import sqlite3
+go = GlobalOperations()
 
 def main(argv):
     opts, args = getopt.getopt(argv, "hl:")
@@ -23,14 +24,14 @@ def main(argv):
         elif opt in ('-l'):
             return arg
         else:
-            print('Please specify label parameter first')
+            print(f'{go.datetime_now()} Please specify label parameter first')
             sys.exit()
             
             
 if __name__ == '__main__':
     
     label = main(sys.argv[1:])
-    print(f'Starting movement signal server at {label}')
+    print(f'{go.datetime_now()} Starting movement signal server at {label}')
     
     # Old outer_fence value: [(21,21),0.001]
     param_sw = {'outer_fence':[(35,35),0.25],
@@ -111,7 +112,7 @@ if __name__ == '__main__':
                     img_blurred = cv2.GaussianBlur(img, param_sw[label][0],0)
                 except cv2.error as e:
                     print(e)
-                    print('Removing troubled files and continue...')
+                    print(f'{go.datetime_now()} Removing troubled files and continue...')
                     print(moving_avg_path)
                     os.remove(moving_avg_path)
                     continue
@@ -139,7 +140,7 @@ if __name__ == '__main__':
                         sqlite.insert_value(readings_db_cols, readings_db_values, readings_db_dtypes)
                         insert_in_progress = False
                     except sqlite3.OperationalError as e:
-                        print(f'movement_signal.py -l {label} Insertion error. Trying to reinitiate sqlite object. {e}')
+                        print(f'{go.datetime_now()} movement_signal.py -l {label} Insertion error. Trying to reinitiate sqlite object. {e}')
                         del sqlite
                         sqlite = Sqlite_v2()
                         sqlite.set_table(label)
@@ -164,11 +165,11 @@ if __name__ == '__main__':
                         if os.path.isfile(average_value_todelete):
                             os.remove(average_value_todelete)
                             
-            print(f"movement_signal.py -l {label} is waiting for new data...")
+            print(f"{go.datetime_now()} movement_signal.py -l {label} is waiting for new data...")
             time.sleep(2)
     
     except KeyboardInterrupt:
-        print(f'Stopping movement signal server at {label}')
+        print(f'{go.datetime_now()} Stopping movement signal server at {label}')
         pass
 
 

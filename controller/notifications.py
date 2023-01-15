@@ -12,6 +12,7 @@ from global_modules import GlobalOperations, Sqlite_v2
 from html import escape
 import shutil
 import sys, getopt
+go = GlobalOperations()
 
 def main(argv):
     opts, args = getopt.getopt(argv, "hl:")
@@ -22,12 +23,12 @@ def main(argv):
         elif opt in ('-l'):
             return arg
         else:
-            print('Please specify label parameter first at {label}')
+            print(f'{go.datetime_now()} Please specify label parameter first at {label}')
             sys.exit()
             
 if __name__ == '__main__':   
     label = main(sys.argv[1:])
-    print(f'notifications.py -l "{label}" Starting notifications server.')
+    print(f'{go.datetime_now()} notifications.py -l "{label}" Starting notifications server.')
     try:
         while True:
             TOKEN = '2002016705:AAGcXBOdx_OAj5LSVxu1LAjVO_xIih8bdfA'
@@ -68,7 +69,6 @@ if __name__ == '__main__':
             notifications_list_ff = [str(i) + '.cache' for i in nl_float]
 
             for notification_fn in notifications_list_ff:
-                go = GlobalOperations()
                 sha256 = go.gethash(str(random.random()))
 
                 notification_path = os.path.join(notifications_label_path, notification_fn)
@@ -103,7 +103,7 @@ if __name__ == '__main__':
                             captured_frames_img.close()
                             sent = True
                         except requests.exceptions.RequestException as e:
-                            print(f'notifications.py -l "{label}" {e} Trying to send notification. Wait for 5 seconds.')
+                            print(f'{go.datetime_now()} notifications.py -l "{label}" {e} Trying to send notification. Wait for 5 seconds.')
                             time.sleep(5)
 
                 # Store to proofing server
@@ -126,7 +126,7 @@ if __name__ == '__main__':
                 try:
                     os.remove(captured_frames_img_path_cache)
                 except PermissionError:
-                    print(f'notifications.py -l "{label}" Failed to remove {captured_frames_img_path_cache}')
+                    print(f'{go.datetime_now()} notifications.py -l "{label}" Failed to remove {captured_frames_img_path_cache}')
                 os.remove(notification_path)
 
         #         break
@@ -135,7 +135,7 @@ if __name__ == '__main__':
             # break
                         
     except KeyboardInterrupt:
-        print(f'notifications.py -l "{label}" Stopping notifications server')
+        print(f'{go.datetime_now()} notifications.py -l "{label}" Stopping notifications server')
         pass
 
 

@@ -7,9 +7,11 @@
 import os
 import shutil
 import time
+from global_modules import GlobalOperations
+go = GlobalOperations()
 
 if __name__ == '__main__':
-    print('Starting proof storing server')
+    print(f'{go.datetime_now()} Starting proof storing server')
     root_path = os.getcwd()
     cache_path = os.path.join(root_path, 'cache')
     proof_path = os.path.join(cache_path, 'proof')
@@ -39,9 +41,9 @@ if __name__ == '__main__':
 
                     try:
                         shutil.copy(captured_frames_img_path, cctv_proof_img_path)
-                        print(f'Copying: {cctv_proof_img_path}')
+                        print(f'{go.datetime_now()} Copying: {cctv_proof_img_path}')
                     except FileNotFoundError:
-                        print(f'Failed file not found: {cctv_proof_img_path}')
+                        print(f'{go.datetime_now()} Failed file not found: {cctv_proof_img_path}')
 
                     # Remove proof queue
                     os.remove(proof_label_list_path)
@@ -49,7 +51,7 @@ if __name__ == '__main__':
             
             
     except KeyboardInterrupt:
-        print(f'Stopping proof storing server')
+        print(f'{go.datetime_now()} Stopping proof storing server')
         pass
         
         

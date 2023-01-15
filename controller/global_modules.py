@@ -89,13 +89,23 @@ class Sqlite_v2(GlobalOperations):
         self.table = table
         
     def create_connection(self, db_path):
-        try:
-            self.conn = sqlite3.connect(db_path)
-            cur = self.conn.cursor()
-            # Enable Write Ahead Logging
-            cur.execute('PRAGMA journal_mode=wal')
-        except Error as e:
-            print(f'Failed to create connection. {e}')
+        conn_success = False
+        if not conn_success:
+            try:
+                self.conn = sqlite3.connect(db_path)
+                cur = self.conn.cursor()
+                # Enable Write Ahead Logging
+                cur.execute('PRAGMA journal_mode=wal')
+                conn_success = True
+            except sqlite3.Error as e:
+                print(f'{self.datetime_now()} Failed to create connection. Trying again. db_path: {db_path} {e}')
+                
+                # Cleanup variables
+                self.conn = None
+                if 'cur' in vars() or 'cur' in globals():
+                    del cur   
+                
+                time.sleep(0.5)
     
     def create_table(self, col_dtypes):
         if isinstance(self.table, str) & isinstance(col_dtypes, str):
@@ -103,7 +113,7 @@ class Sqlite_v2(GlobalOperations):
             cur = self.conn.cursor()
             cur.execute(sql)
         else:
-            print('Define self.table first and or recheck col_dtypes is in list type.')
+            print(f'{self.datetime_now()} Define self.table first and or recheck col_dtypes is in list type.')
             
     
     def insert_value(self, cols, values, dtypes):            
@@ -136,9 +146,9 @@ class Sqlite_v2(GlobalOperations):
                 cur.execute(sql, values_all)
                 self.conn.commit()
             else:
-                print('Makesure that colnames is in python list format `[...,...,...]`')
+                print(f'{self.datetime_now()} Makesure that colnames is in python list format `[...,...,...]`')
         else:
-            print('Please initialize connection and table name first.')
+            print(f'{self.datetime_now()} Please initialize connection and table name first.')
     
 class VibrateProcessor(Sqlite):
     def __init__(self, *args, **kwargs):

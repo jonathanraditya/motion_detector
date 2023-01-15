@@ -9,6 +9,8 @@ from datetime import datetime
 import sys, getopt
 import time
 import psutil
+from global_modules import GlobalOperations
+go = GlobalOperations()
 
 def main(argv):
     opts, args = getopt.getopt(argv, "hl:")
@@ -19,12 +21,12 @@ def main(argv):
         elif opt in ('-l'):
             return arg
         else:
-            print('Please specify label parameter first')
+            print(f'{go.datetime_now()} Please specify label parameter first')
             sys.exit()
             
 if __name__ == '__main__':
     label = main(sys.argv[1:])
-    print(f'movement_signal_alert.py -l "{label}" Starting movement signal alert server at {label}')
+    print(f'{go.datetime_now()} movement_signal_alert.py -l "{label}" Starting movement signal alert server at {label}')
     
     try:
         while True:
@@ -38,7 +40,7 @@ if __name__ == '__main__':
             # Get last threshold
             thresholds_list = os.listdir(thresholds_label_path)
             if thresholds_list == []:
-                print(f'movement_signal_alert.py -l "{label}" Waiting for threshold data...')
+                print(f'{go.datetime_now()} movement_signal_alert.py -l "{label}" Waiting for threshold data...')
                 time.sleep(10)
                 continue
             thl_float = [float(i.replace('.cache','')) for i in thresholds_list]
@@ -53,10 +55,10 @@ if __name__ == '__main__':
                             threshold_still_reading = False
                             break
                     except ValueError:
-                        print(f'movement_signal_alert.py -l "{label}" Threshold reading failed. Trying another threshold cache. Last path: {threshold_path}')
+                        print(f'{go.datetime_now()} movement_signal_alert.py -l "{label}" Threshold reading failed. Trying another threshold cache. Last path: {threshold_path}')
                         time.sleep(0.1)
                 if threshold_still_reading:
-                    print(f'movement_signal_alert.py -l "{label}" All threshold reading attempt failed. Wating for more threshold data...')
+                    print(f'{go.datetime_now()} movement_signal_alert.py -l "{label}" All threshold reading attempt failed. Wating for more threshold data...')
                     time.sleep(10)
                     continue
 
@@ -83,7 +85,7 @@ if __name__ == '__main__':
                     with open(reading_path, 'r') as f:
                         reading = int(f.read())
                 except ValueError:
-                    print(f'movement_signal_alert.py -l "{label}" Value error. Assume 0 reading value.')
+                    print(f'{go.datetime_now()} movement_signal_alert.py -l "{label}" Value error. Assume 0 reading value.')
                     reading = 0
                     with open(reading_path, 'w') as f:
                         f.write(str(0))
@@ -102,12 +104,12 @@ if __name__ == '__main__':
                 try:
                     os.remove(reading_path)
                 except PermissionError:
-                    print(f'movement_signal_alert.py -l "{label}" Failed to remove {reading_path}')
+                    print(f'{go.datetime_now()} movement_signal_alert.py -l "{label}" Failed to remove {reading_path}')
                     pass
                 
             time.sleep(0.5)
     except KeyboardInterrupt:
-        print(f'Stopping movement signal alert server at {label}')
+        print(f'{go.datetime_now()} Stopping movement signal alert server at {label}')
         pass
         
 

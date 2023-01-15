@@ -5,10 +5,11 @@
 
 
 import pandas as pd
-from global_modules import Sqlite
+from global_modules import Sqlite, GlobalOperations
 import os
 import sys, getopt
 import time
+go = GlobalOperations()
 
 def main(argv):
     opts, args = getopt.getopt(argv, "hl:")
@@ -19,7 +20,7 @@ def main(argv):
         elif opt in ('-l'):
             return arg
         else:
-            print('Please specify label parameter first')
+            print(f'{go.datetime_now()} Please specify label parameter first')
             sys.exit()
             
 if __name__ == '__main__':
@@ -75,11 +76,11 @@ if __name__ == '__main__':
                     if os.path.isfile(threshold_value_todelete):
                         os.remove(threshold_value_todelete)
 
-            print(f"movement_signal_threshold_updater.py -l {label} is waiting for new data...")
+            print(f"{go.datetime_now()} movement_signal_threshold_updater.py -l {label} is waiting for new data...")
             time.sleep(60)
     
     except KeyboardInterrupt:
-        print(f'Stopping movement signal threshold server at {label}')
+        print(f'{go.datetime_now()} Stopping movement signal threshold server at {label}')
         pass
 
 

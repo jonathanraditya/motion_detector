@@ -10,6 +10,8 @@ import os
 import shutil
 from datetime import datetime
 import time
+from global_modules import GlobalOperations
+go = GlobalOperations()
 
 origin_root = os.path.join(f'C:\\Users\\{os.getlogin()}\\Web\\CaptureFiles')
 print(f'Listening at: {origin_root}')
@@ -49,13 +51,13 @@ def main(origin_root, captured_frames_path):
             
 if __name__ == '__main__':
     try:
-        print(f'capture_restructurer server started at {datetime.now()}')
+        print(f'{go.datetime_now()} capture_restructurer server is started')
         # Run infinite times.
         while True:
             main(origin_root, captured_frames_path)
             time.sleep(0.5)
     except KeyboardInterrupt:
-        print('Stopping capture_restructurer server. Thank you!')
+        print(f'{go.datetime_now()} Stopping capture_restructurer server. Thank you!')
 
 
 # In[ ]:
