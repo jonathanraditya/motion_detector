@@ -20,8 +20,8 @@ if __name__ == '__main__':
     keep_records_for = 2 # day
     date_threshold = (datetime.now() - timedelta(hours=24)).timestamp()
 
-    while True:
-        try:
+    try:
+        while True:
             captured_frames_labels = os.listdir(captured_frames_path)
             for label in captured_frames_labels:
                 captured_frames_label_path = os.path.join(captured_frames_path, label)
@@ -37,9 +37,9 @@ if __name__ == '__main__':
                 # 1 hour
                 time.sleep(1) 
 
-        except KeyboardInterrupt:
-            print(f'{go.datetime_now()} Cleanup server stopped.')
-            pass
+    except KeyboardInterrupt:
+        print(f'{go.datetime_now()} Cleanup server stopped.')
+        pass
 
 
 # In[ ]:
