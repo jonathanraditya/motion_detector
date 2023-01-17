@@ -107,7 +107,7 @@ if __name__ == '__main__':
                     print(f'{go.datetime_now()} movement_signal_alert.py -l "{label}" Failed to remove {reading_path}')
                     pass
                 
-            time.sleep(0.5)
+            time.sleep(0.1)
     except KeyboardInterrupt:
         print(f'{go.datetime_now()} Stopping movement signal alert server at {label}')
         pass

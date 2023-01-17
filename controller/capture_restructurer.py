@@ -55,7 +55,7 @@ if __name__ == '__main__':
         # Run infinite times.
         while True:
             main(origin_root, captured_frames_path)
-            time.sleep(0.5)
+            time.sleep(0.1)
     except KeyboardInterrupt:
         print(f'{go.datetime_now()} Stopping capture_restructurer server. Thank you!')
 

@@ -131,7 +131,7 @@ if __name__ == '__main__':
 
         #         break
         #     break
-            time.sleep(0.5)
+            time.sleep(0.1)
             # break
                         
     except KeyboardInterrupt:

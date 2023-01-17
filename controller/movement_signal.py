@@ -166,7 +166,7 @@ if __name__ == '__main__':
                             os.remove(average_value_todelete)
                             
             print(f"{go.datetime_now()} movement_signal.py -l {label} is waiting for new data...")
-            time.sleep(2)
+            time.sleep(0.1)
     
     except KeyboardInterrupt:
         print(f'{go.datetime_now()} Stopping movement signal server at {label}')

@@ -22,7 +22,7 @@ from selenium.common.exceptions import WebDriverException
 
 go = GlobalOperations()
 
-capture_interval = 1 #second(s)
+capture_interval = 0.7 #second(s)
 live_for = 240 #second(s), server lived for
 capture_per_session = int(live_for / capture_interval)
 wait_timeout = 20 #second(s)
