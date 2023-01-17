@@ -7,6 +7,7 @@ import pytz
 import hashlib
 import random
 import time
+import psutil
 
 class GlobalOperations:   
     def datetime_now(self):
@@ -19,6 +20,11 @@ class GlobalOperations:
         if not isinstance(string, str):
             string = str(string)            
         return hashlib.sha256(bytes(string, 'utf-8')).hexdigest()
+    def free_storage(self, path, divider=2**30):
+        if os.path.exists(path):
+            return int(psutil.disk_usage(path).free / divider)
+        else:
+            return None
 
 class Sqlite(GlobalOperations):
     '''Version 1.'''

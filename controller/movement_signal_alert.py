@@ -95,7 +95,7 @@ if __name__ == '__main__':
                     data_time = datetime.fromtimestamp(float(reading_fn.replace('.cache','')))
                     data_time = data_time.strftime('%H:%M:%S')
                     storage = psutil.disk_usage(root_path)
-                    content = f'''{data_time} {label} val:{reading} threshold:{int(threshold)} free_storage:{int(storage.free / (2**30))}'''
+                    content = f'''{data_time} {label} val:{reading} threshold:{int(threshold)} free_storage:{int(storage.free / (2**30))}GB'''
                     print(content)
                     with open(notifications_path, 'w') as f:
                         f.write(content)
