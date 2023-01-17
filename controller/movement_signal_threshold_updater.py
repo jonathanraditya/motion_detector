@@ -39,10 +39,10 @@ if __name__ == '__main__':
     os.makedirs(thresholds_label_path, exist_ok=True)
     
     # Constants
-    capture_rate = 1.65 #seconds
+    capture_rate = 1.05 #seconds
     # 24hrs * 60mins * 60secs, a day in seconds (old value)
     # 1hr * 5mins * 60secs, a day in seconds
-    data_limit = int(1 * 5 * 60 / capture_rate) 
+    data_limit = int(1 * 60 * 60 / capture_rate) 
     
     # Database initialization
     sqlite = Sqlite()
