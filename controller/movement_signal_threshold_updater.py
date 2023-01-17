@@ -42,7 +42,7 @@ if __name__ == '__main__':
     capture_rate = 1.05 #seconds
     # 24hrs * 60mins * 60secs, a day in seconds (old value)
     # 1hr * 5mins * 60secs, a day in seconds
-    data_limit = int(1 * 60 * 60 / capture_rate) 
+    data_limit = int(1 * 1 * 60 / capture_rate) 
     
     # Database initialization
     sqlite = Sqlite()
@@ -77,7 +77,7 @@ if __name__ == '__main__':
                         os.remove(threshold_value_todelete)
 
             print(f"{go.datetime_now()} movement_signal_threshold_updater.py -l {label} is waiting for new data...")
-            time.sleep(60)
+            time.sleep(10)
     
     except KeyboardInterrupt:
         print(f'{go.datetime_now()} Stopping movement signal threshold server at {label}')
