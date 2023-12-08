@@ -47,7 +47,17 @@ def main(origin_root, captured_frames_path):
             target_path = os.path.join(target_folder, f'{timestamp}.jpg')
 
             # Move file to /cache/captured_frames, outer_fence/hallway/garden
-            shutil.move(origin_path, target_path)
+            try:
+                shutil.move(origin_path, target_path)
+            except PermissionError, FileExistsError:
+                # PermissionError / FileExistsError
+                # Abort moving to new location and straight remove
+                print(f'Fail to move: {origin_path}')
+                try:
+                    os.remove(origin_path)
+                except FileNotFoundError:
+                    print(f'Fail to move and remove: {origin_path}')
+                    pass
             
 if __name__ == '__main__':
     try:
