@@ -12,7 +12,7 @@ from dotenv import dotenv_values
 config = dotenv_values('.env')
 
 class GlobalOperations:  
-    self.config = config
+    config = dotenv_values('.env')
     def datetime_now(self):
         tz = pytz.timezone('Asia/Jakarta')
         return datetime.now(tz)
