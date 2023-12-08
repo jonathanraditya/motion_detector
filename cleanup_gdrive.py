@@ -43,6 +43,7 @@ if __name__ == '__main__':
 
                     try:
                         shutil.copy(source_file_path, target_file_path)
+                        os.remove(source_file_path)
                         print(f'{go.datetime_now()} Copying: {target_file_path}')
                     except FileNotFoundError:
                         print(f'{go.datetime_now()} Failed file not found: {target_file_path}')
