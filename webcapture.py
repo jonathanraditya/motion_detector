@@ -69,7 +69,7 @@ if __name__ == "__main__":
                         # Login page
                         wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button')))
                         driver.find_element('id', 'username').send_keys(go.config['CCTV_GLOBAL_USERNAME_URLENCODED'])
-                        driver.find_element('id', 'password').send_keys(go.config['CCTV_GLOBAL_PASSWORD_URLENCODED'])
+                        driver.find_element('id', 'password').send_keys(go.config['CCTV_GLOBAL_PASSWORD'])
                         driver.find_element('xpath', '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button').click()    
                         print(f'{go.datetime_now()} Login success at {urlhost}')
 
