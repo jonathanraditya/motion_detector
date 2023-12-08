@@ -70,7 +70,6 @@ if __name__ == '__main__':
 # In[13]:
 
 
-
 # root_path = os.getcwd()
 # cache_path = os.path.join(root_path, 'cache')
 # proof_cp_path = os.path.join(cache_path, 'proof - Copy')
@@ -102,6 +101,7 @@ if __name__ == '__main__':
 #     shutil.copy(proof_list_path, proof_dest_path)
     
 #     os.remove(proof_list_path)
+
 
 
 
