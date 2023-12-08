@@ -59,6 +59,7 @@ if __name__ == '__main__':
 
     # Readings db
     db_path = os.path.join(root_path, 'db')
+    os.makedirs(db_path, exist_ok=True)
     readings_db = os.path.join(db_path, go.config['MOVEMENT_SIGNAL_DB'])
     sqlite = Sqlite_v2()
     sqlite.set_table(label)
