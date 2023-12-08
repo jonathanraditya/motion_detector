@@ -19,9 +19,6 @@ file_filter = FileFrameFilter("file_filter")
 live_out_filter = ForkFrameFilter("live_out_filter", gate_filter, file_filter)
 livethread = LiveThread("livethread")
 
-
-
-rtsp_address = "rtsp://admin:Valerian%40live1@192.168.0.208:554/Streaming/Channels/101/"
 rtsp_address = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4"
 
 ctx = LiveConnectionContext(LiveConnectionType_rtsp, rtsp_address, 1, live_out_filter)

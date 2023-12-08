@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[76]:
+
+
+from dotenv import dotenv_values
+config = dotenv_values('../../.env')
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
 import sqlite3
@@ -7,6 +15,15 @@ import pytz
 import hashlib
 import random
 import time
+
+
+# Class tree:
+# -- GlobalOperations
+# --- Sqlite
+# ---- Vibrateserver
+
+# In[145]:
+
 
 class GlobalOperations:   
     def datetime_now(self):
@@ -79,7 +96,7 @@ class VibrateProcessor(Sqlite):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.root_dir = os.getcwd()
-        self.db = 'records.db'
+        self.db = config['VIBRATION_RECORDS_DB']
         
         self.db_path = os.path.join(self.root_dir, self.db)
 
@@ -111,12 +128,12 @@ class VibrateProcessor(Sqlite):
                 'reset_trigger':0
             }
         }
-        random.seed(1209218402348023984239874891)
+        random.seed(int(config['RANDOM_SEED']))
         self.key = self.gethash(random.random())
         self.key = self.gethash(self.key)
         
-        self.host = '192.168.0.7'
-        self.port = 5000
+        self.host = config['HOST_NODE_IP']
+        self.port = int(config['HOST_NODE_PORT'])
         
         
     
@@ -182,3 +199,223 @@ if __name__ == '__main__':
     
     webServer.server_close()
     print('Server stopped.')
+
+
+# In[153]:
+
+
+# vs = Vibrateserver()
+# vs.key
+
+
+# In[154]:
+
+
+# vs.create_connection(vs.db_path)
+
+
+# In[155]:
+
+
+# type(vs.conn)
+
+
+# In[156]:
+
+
+# isinstance(vs.conn, sqlite3.Connection)
+
+
+# In[94]:
+
+
+# webServer = HTTPServer((vs.host, vs.port), vs)
+# print(f'Server started http://{vs.host}:{vs.port}')
+
+
+# In[138]:
+
+
+# vs.host
+
+
+# In[ ]:
+
+
+# try:
+#     webServer.serve_forever()
+# except KeyboardInterrupt:
+#     pass
+
+
+# In[149]:
+
+
+# vs.path = 'http://localhost:5000/output?key=431f8a00bb579d4691b19efe332e21d8b61ff25e8a1698d81bf95a756660f3ee&hwid=one_hallway'
+
+
+# In[150]:
+
+
+# vs.do_GET()
+
+
+# In[130]:
+
+
+# urlparse(vs.path).path
+
+
+# In[ ]:
+
+
+
+
+
+# In[73]:
+
+
+# from urllib.parse import urlparse, parse_qs
+# url = 'localhost:8080/input?key=431f8a00bb579d4691b19efe332e21d8b61ff25e8a1698d81bf95a756660f3ee&hwid=two_corner&payload=423z982z912'
+# qs = parse_qs(urlparse(url).query)
+# path = urlparse(url).path
+
+
+# In[151]:
+
+
+# qs['hwid'][0] in ag.in_sw.keys()
+
+
+# In[80]:
+
+
+# ag.in_sw.keys()
+
+
+# In[152]:
+
+
+# 'hwid' in
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# <!-- localhost:8080/input?key=431f8a00bb579d4691b19efe332e21d8b61ff25e8a1698d81bf95a756660f3ee&hwid=two_corner&payload=423z982z912 -->
+
+# In[85]:
+
+
+# f = [0,0,0]
+# len(f)
+
+
+# In[ ]:
+
+
+# http://192.168.0.5:5000/input?key=431f8a00bb579d4691b19efe332e21d8b61ff25e8a1698d81bf95a756660f3ee&hwid=two_corner&payload=423z982z912
+
+# http://192.168.0.5:5000/input?key=431f8a00bb579d4691b19efe332e21d8b61ff25e8a1698d81bf95a756660f3ee&hwid=two_entry&payload=423z982
+
+# one_perimeter
+# http://192.168.0.5:5000/input?key=431f8a00bb579d4691b19efe332e21d8b61ff25e8a1698d81bf95a756660f3ee&hwid=one_perimeter&payload=423z982z998z45z456
+
+
+# In[ ]:
+
+
+# http://192.168.0.5:5000/output?key=431f8a00bb579d4691b19efe332e21d8b61ff25e8a1698d81bf95a756660f3ee&hwid=one_hallway
+
+
+# In[ ]:
+
+
+
+
+
+# In[157]:
+
+
+# a = ['front_facing', 'side_facing', 'room_entry']
+# b = ['423', '982', '912']
+
+
+# In[159]:
+
+
+# all(isinstance(i, list) for i in [a, b])
+
+
+# In[160]:
+
+
+# a = ['a', 'b', 'c', 'd']
+# b = ['float', 'int', 'int', 'int']
+# for x, y in zip(a, b):
+#     print(x, y)
+
+
+# In[ ]:
+
+
+
+
+
+# In[161]:
+
+
+# a = {
+#             'two_corner':{
+#                 'reset_trigger':0,
+#             },
+#             'two_entry':{
+#                 'reset_trigger':0,
+#             },
+#             'one_perimeter':{
+#                 'reset_trigger':0,
+#             },
+#             'one_main':{
+#                 'reset_trigger':0,
+#             },
+#             'one_hallway':{
+#                 'kitchen_lamp_switch':0,
+#                 'outdoor_lamp_switch':0,
+#                 'parlor_lamp_switch':0,
+#                 'reset_trigger':0
+#             }
+#         }
+
+
+# In[172]:
+
+
+# ','.join([str(v) for v in a['one_hallway'].values()])
+
+
+# In[170]:
+
+
+# ','.join(a['one_hallway'].values())
+
+
+# In[ ]:
+
+
+
+

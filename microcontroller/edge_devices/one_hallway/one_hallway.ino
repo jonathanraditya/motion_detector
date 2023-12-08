@@ -1,8 +1,8 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-const char* ssid = "Kampung Bali_EXT";
-const char* password = "(//////)";
+const char* ssid = "SSID";
+const char* password = "PASSWORD";
 
 //“hwid”
 //  “two_corner”
@@ -46,8 +46,8 @@ const char* password = "(//////)";
 
 String hwid = "one_hallway";
 String key = "431f8a00bb579d4691b19efe332e21d8b61ff25e8a1698d81bf95a756660f3ee";
-String input_url = "http://192.168.0.7:5000/input?key=" + key + "&hwid=" + hwid + "&payload=";
-String output_url = "http://192.168.0.7:5000/output?key=" + key + "&hwid=" + hwid;
+String input_url = "http://192.168.0.1:5000/input?key=" + key + "&hwid=" + hwid + "&payload=";
+String output_url = "http://192.168.0.1:5000/output?key=" + key + "&hwid=" + hwid;
 
 const int pin1 = 32;
 const int pin2 = 33;
