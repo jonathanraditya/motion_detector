@@ -49,7 +49,7 @@ def main(origin_root, captured_frames_path):
             # Move file to /cache/captured_frames, outer_fence/hallway/garden
             try:
                 shutil.move(origin_path, target_path)
-            except PermissionError, FileExistsError:
+            except (PermissionError, FileExistsError):
                 # PermissionError / FileExistsError
                 # Abort moving to new location and straight remove
                 print(f'Fail to move: {origin_path}')
