@@ -23,7 +23,7 @@ if __name__ == '__main__':
         while True:
             cleanup_counter = 0
             beginning_storage = go.free_storage(root_path)
-            date_threshold = (datetime.now() - timedelta(hours=24)).timestamp()
+            date_threshold = (datetime.now() - timedelta(hours=keep_records_for * 24)).timestamp()
             captured_frames_labels = os.listdir(captured_frames_path)
             for label in captured_frames_labels:
                 captured_frames_label_path = os.path.join(captured_frames_path, label)
