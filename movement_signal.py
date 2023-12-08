@@ -172,21 +172,3 @@ if __name__ == '__main__':
         print(f'{go.datetime_now()} Stopping movement signal server at {label}')
         pass
 
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-

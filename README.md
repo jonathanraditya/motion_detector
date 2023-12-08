@@ -1,6 +1,6 @@
 # Hikvision CCTV Motion Detector
 
-A codebase to automatically capture live frames from Hikvision CCTV web interface, and using python microservices to run a live motion detector and send it to Telegram
+A codebase to automatically capture live frames from Hikvision CCTV web interface, and using python microservices to run a live motion detector and send it to Telegram.
 
 # Server backend controller
 ## `global_modules.py`
@@ -8,6 +8,28 @@ Globally used classes and functions.
 
 ## `microcontroller_server.py`
 Server for vibration_server microcontroller. This would enable microcontroller to store readings (`/input`) and get output (`/output`) to the server.
+
+## `capture.py` **(deprecated)**
+A capture server implementation using VLC. This microservice is deprecated as there are stability issue arises, like:
+- Frequent disconnect between server and edge device(s)
+- Untolerable delay (~10s between events)
+- Corrupted captured image (horizontal black/RGB lines)
+- The communication between agent (VLC) and controller (python) is unreliable. It'd be better if there are: (1) sufficient documentation, (2) responsive control between service, (3) global command to end the service
+
+I've tried many things:
+- Change h265 to h264 (this is massively decrease the delay and cpu usage, as well as increase reliability)
+- Maintain the WiFi signal with the range of -30dbm (very strong) to -55dbm (strong)
+- Using the latest patch of the router (Tp-Link AX55)
+- Lowering the resolution, from 1080p to 144p
+- Using latest VLC version
+
+but the issues still persist.
+
+In the end, I discovered that this reliability issue is not present if the CCTV accessed directly from the native HikVision web control panel interface. They used custom engine called "LocalServiceControl" to deliver this stunning performance.
+
+Though I haven't found any documentation regarding this system, I decided to use, control, and leverage this web interface using Selenium. The captured frames then saved into target folder.
+
+I used saved image as a protobuf to integrate the HikVision system and my motion detector service.
 
 ## `webcapture.ipynb`
 Modify `webcapture.py` by modifying the .ipynb file and exporting as "executeable script".

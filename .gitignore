@@ -8,4 +8,5 @@ db/
 geckodriver.log
 proof/
 *.jpg
-!image_not_found.jpg
+image_not_found.jpg
+old_capture_server/valkka-examples/

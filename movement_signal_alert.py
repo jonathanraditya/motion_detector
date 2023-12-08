@@ -111,11 +111,4 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print(f'{go.datetime_now()} Stopping movement signal alert server at {label}')
         pass
-        
-
-
-# In[ ]:
-
-
-
 

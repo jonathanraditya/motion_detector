@@ -53,9 +53,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print(f'{go.datetime_now()} Stopping proof storing server')
         pass
-        
-        
-        
 
 
 # In[2]:
