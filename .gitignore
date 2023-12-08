@@ -1,4 +1,4 @@
-# Db takes up space
+
 *.db
 *.log
 .ipynb_checkpoints/
