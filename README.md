@@ -3,6 +3,34 @@
 A codebase to automatically capture live frames from Hikvision CCTV web interface, and using python microservices to run a live motion detector and send it to Telegram.
 
 # Server backend controller
+
+## Setting the `.env` variables on the root folder
+
+```sh
+# This is the environment variables that is required for this service to run 
+HOST_NODE_IP=192.168.0.1
+HOST_NODE_PORT=5000
+RANDOM_SEED=1
+VIBRATION_RECORDS_DB=records.db
+CCTV_1_IP=192.168.0.2
+CCTV_1_NAME=outer_fence
+CCTV_2_IP=192.168.0.3
+CCTV_2_NAME=hallway
+CCTV_3_IP=192.168.0.4
+CCTV_3_NAME=garden
+CCTV_GLOBAL_USERNAME_URLENCODED=administrator
+CCTV_GLOBAL_PASSWORD_URLENCODED=administrator
+CAPTURE_EVENTS_DB=events.db
+MOVEMENT_SIGNAL_DB=movement_signal.db
+TELEGRAM_TOKEN=YOUR_TELEGRAM_TOKEN
+TELEGRAM_CHAT_ID_1=TELEGRAM_TARGET_CHAT_ID
+TELEGRAM_CHAT_ID_2=TELEGRAM_TARGET_CHAT_ID
+TELEGRAM_HAT_ID_3=TELEGRAM_TARGET_CHAT_ID
+NOTIFICATIONS_DB=notifications.db
+# This is Google Drive mounted disk (auto sync)
+CCTV_PROOF_PATH=G:\\My Drive\\cctv_proof
+```
+
 ## `global_modules.py`
 Globally used classes and functions.
 

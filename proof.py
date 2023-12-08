@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     captured_frames_path = os.path.join(cache_path, 'captured_frames')
 
-    cctv_proof_path = 'G:\\My Drive\\cctv_proof'
+    cctv_proof_path = go.config['CCTV_PROOF_PATH']
     os.makedirs(cctv_proof_path, exist_ok=True)
 
     try:
@@ -76,12 +76,12 @@ if __name__ == '__main__':
 
 # captured_frames_path = os.path.join(cache_path, 'captured_frames')
 
-# cctv_proof_path = 'G:\\My Drive\\cctv_proof'
+# cctv_proof_path = go.config['CCTV_PROOF_PATH']
 # os.makedirs(cctv_proof_path, exist_ok=True)
 
 # sqlite = Sqlite_v2()
 # sqlite.set_table('notifications')
-# sqlite.create_connection('./db/notifications.db')
+# sqlite.create_connection('./db/'+go.config['NOTIFICATIONS_DB'])
 
 # df = pd.read_sql(f'select * from notifications', sqlite.conn)
 

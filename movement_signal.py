@@ -34,9 +34,9 @@ if __name__ == '__main__':
     print(f'{go.datetime_now()} Starting movement signal server at {label}')
     
     # Old outer_fence value: [(21,21),0.001]
-    param_sw = {'outer_fence':[(35,35),0.25],
-                'garden':[(35,35),0.25],
-                'hallway':[(35,35),0.25]}
+    param_sw = {go.config['CCTV_1_NAME']:[(35,35),0.25],
+                go.config['CCTV_2_NAME']:[(35,35),0.25],
+                go.config['CCTV_3_NAME']:[(35,35),0.25]}
     
     root_path = os.getcwd()
     cache_path = os.path.join(root_path, 'cache')
@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
     # Readings db
     db_path = os.path.join(root_path, 'db')
-    readings_db = os.path.join(db_path, 'movement_signal.db')
+    readings_db = os.path.join(db_path, go.config['MOVEMENT_SIGNAL_DB'])
     sqlite = Sqlite_v2()
     sqlite.set_table(label)
     sqlite.create_connection(readings_db)

@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     root_path = os.getcwd()
     db_path = os.path.join(root_path, 'db')
-    movement_signal_db_path = os.path.join(db_path, 'movement_signal.db')
+    movement_signal_db_path = os.path.join(db_path, go.config['MOVEMENT_SIGNAL_DB'])
     cache_path = os.path.join(root_path, 'cache')
     movements_path = os.path.join(cache_path, 'movements')
     thresholds_path = os.path.join(movements_path, 'thresholds')
@@ -94,11 +94,11 @@ if __name__ == '__main__':
 # import time
 # import numpy as np
 
-# label = 'hallway'
+# label = go.config['CCTV_2_NAME']
 
 # root_path = os.getcwd()
 # db_path = os.path.join(root_path, 'db')
-# movement_signal_db_path = os.path.join(db_path, 'movement_signal.db')
+# movement_signal_db_path = os.path.join(db_path, go.config['MOVEMENT_SIGNAL_DB'])
 
 # # Constants
 # capture_rate = 1.65 #seconds

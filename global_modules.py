@@ -8,8 +8,11 @@ import hashlib
 import random
 import time
 import psutil
+from dotenv import dotenv_values
+config = dotenv_values('.env')
 
-class GlobalOperations:   
+class GlobalOperations:  
+    self.config = config
     def datetime_now(self):
         tz = pytz.timezone('Asia/Jakarta')
         return datetime.now(tz)
@@ -161,7 +164,7 @@ class VibrateProcessor(Sqlite):
         super().__init__(*args, **kwargs)
         self.root_dir = os.getcwd()
         self.db_dir = os.path.join(self.root_dir, 'db')
-        self.db = 'records.db'
+        self.db = config['VIBRATION_RECORDS_DB']
         
         self.db_path = os.path.join(self.db_dir, self.db)
 
@@ -193,12 +196,12 @@ class VibrateProcessor(Sqlite):
                 'reset_trigger':0
             }
         }
-        random.seed(1209218402348023984239874891)
+        random.seed(int(config['RANDOM_SEED']))
         self.key = self.gethash(random.random())
         self.key = self.gethash(self.key)
         
-        self.host = '192.168.0.7'
-        self.port = 5000
+        self.host = config['HOST_NODE_IP']
+        self.port = int(config['HOST_NODE_PORT'])
         
         
     

@@ -31,11 +31,10 @@ if __name__ == '__main__':
     print(f'{go.datetime_now()} notifications.py -l "{label}" Starting notifications server.')
     try:
         while True:
-            TOKEN = '2002016705:AAGcXBOdx_OAj5LSVxu1LAjVO_xIih8bdfA'
-            # Chita, ito, ibu
-            CHAT_IDS = ['1217210026','1293826547','5580614403']
-            # CHAT_IDS = ['@jonathanraditya']
-
+            TOKEN = go.config['TELEGRAM_TOKEN']
+            CHAT_IDS = [go.config['TELEGRAM_CHAT_ID_1'],
+                        go.config['TELEGRAM_CHAT_ID_2'],
+                        go.config['TELEGRAM_CHAT_ID_3']]
 
             root_path = os.getcwd()
             cache_path = os.path.join(root_path, 'cache')
@@ -49,7 +48,7 @@ if __name__ == '__main__':
             os.makedirs(deception_path, exist_ok=True)
             
             db_path = os.path.join(root_path, 'db')
-            notifications_db = os.path.join(db_path, 'notifications.db')
+            notifications_db = os.path.join(db_path, go.config['NOTIFICATIONS_DB'])
             sqlite = Sqlite_v2()
             sqlite.set_table('notifications')
             sqlite.create_connection(notifications_db)

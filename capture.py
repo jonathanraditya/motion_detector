@@ -18,15 +18,26 @@ import hashlib
 import random
 import time
 import pandas as pd
-from global_modules import VibrateProcessor
+from global_modules import VibrateProcessor, GlobalOperations
+
+go = GlobalOperations()
+
+CG_UNAME = go.config['CCTV_GLOBAL_USERNAME_URLENCODED']
+CG_PASS = go.config['CCTV_GLOBAL_PASSWORD_URLENCODED']
+C1_IP = go.config['CCTV_1_IP']
+C1_N = go.config['CCTV_1_NAME']
+C2_IP = go.config['CCTV_2_IP']
+C2_N = go.config['CCTV_2_NAME']
+C3_IP = go.config['CCTV_3_IP']
+C3_N = go.config['CCTV_3_NAME']
 
 
 # In[2]:
 
 
-streams = {'outer_fence':{'stream_rtsp':'rtsp://admin:Valerian%40live1@192.168.0.170:554/Streaming/Channels/102/','player_obj':0},
-           'garden':{'stream_rtsp':'rtsp://admin:Valerian%40live1@192.168.0.208:554/Streaming/Channels/102/','player_obj':0},
-           'hallway':{'stream_rtsp':'rtsp://admin:Valerian%40live1@192.168.0.207:554/Streaming/Channels/102/','player_obj':0}}
+streams = {C1_N:{'stream_rtsp':f"rtsp://{CGUNAME}:{CGPASS}@{C1_IP}:554/Streaming/Channels/102/",'player_obj':0},
+           C2_N:{'stream_rtsp':f"rtsp://{CGUNAME}:{CGPASS}@{C2_IP}:554/Streaming/Channels/102/",'player_obj':0},
+           C3_N:{'stream_rtsp':f"rtsp://{CGUNAME}:{CGPASS}@{C3_IP}:554/Streaming/Channels/102/",'player_obj':0}}
 
 # UPGRADE OPTIONS: Ping before connecting
 # Common problems: no video showed up if no admin connection to live view
@@ -117,7 +128,7 @@ class Sqlite(GlobalOperations):
 # Initiate directory, database
 root_dir = os.getcwd()
 db_dir = os.path.join(root_dir, 'db')
-events_db = 'events.db'
+events_db = go.config['CAPTURE_EVENTS_DB']
 events_db_path = os.path.join(db_dir, events_db)
 events_table = 'events'
 
@@ -152,7 +163,7 @@ events_sq.create_table(cols_dtypes_bind)
 # Use records.db to create capture_status_api status
 # Read one_hallway, one_main, one_perimeter, two_corner, two_entry in the same time
 vp = VibrateProcessor()
-records_db = 'records.db'
+records_db = go.config['VIBRATION_RECORDS_DB']
 records_db_path = os.path.join(db_dir, records_db)
 records_db_path_rel = os.path.relpath(records_db_path, root_dir)
 records_tables = list(vp.in_sw.keys())

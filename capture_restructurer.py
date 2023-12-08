@@ -22,9 +22,9 @@ os.makedirs(captured_frames_path, exist_ok=True)
 print(f'Target directory: {captured_frames_path}')
 
 def main(origin_root, captured_frames_path):
-    routers = {'outer_fence':'192.168.0.170',
-           'hallway':'192.168.0.207',
-           'garden':'192.168.0.208'}
+    routers = {go.config['CCTV_1_NAME']:go.config['CCTV_1_IP'],
+           go.config['CCTV_2_NAME']:go.config['CCTV_2_IP'],
+           go.config['CCTV_3_NAME']:go.config['CCTV_3_IP']}
     routers_inversed = {v:k for k,v in routers.items()}
     
     origin_main_folders = os.listdir(origin_root)
