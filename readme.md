@@ -156,6 +156,7 @@ DEPLOYMENT:
 - create env and update dependencies from /conda_env
 
 Command to run:
+(is an environment to select, `conda activate environment`)
 - python webcapture.py -u "192.168.0.170" (selenium)
 - python webcapture.py -u "192.168.0.207" (selenium)
 - python webcapture.py -u "192.168.0.208" (selenium)
