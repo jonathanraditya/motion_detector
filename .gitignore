@@ -13,3 +13,5 @@ old_capture_server/valkka-examples/
 sandbox.ipynb
 sandbox.py
 .env
+telegram_get_updates.ipynb
+telegram_get_updates.py
