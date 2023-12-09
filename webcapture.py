@@ -94,7 +94,7 @@ if __name__ == "__main__":
                             print(f'{go.datetime_now()} End of capture session. Reloggin...')
                         # Closing & relaunching driver every `browser_ttl` times
                         print(f'{go.datetime_now()} End of browser time to live. Closing browser window and launch again.')
-                        driver.close()
+                    driver.close()
             except TimeoutException:
                 print(f'{go.datetime_now()} webcapture.py -u "{urlhost}" Request timeout. Wait for {wait_timeout}s.')
                 time.sleep(wait_timeout)
