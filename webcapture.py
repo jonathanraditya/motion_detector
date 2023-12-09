@@ -23,9 +23,10 @@ from selenium.common.exceptions import WebDriverException
 go = GlobalOperations()
 
 capture_interval = 0.7 #second(s)
-live_for = 240 #second(s), server lived for
+live_for = 20 #second(s), server lived for
 capture_per_session = int(live_for / capture_interval)
 wait_timeout = 20 #second(s)
+browser_ttl = 3 # browser time to live. Quit and restart browser after n number of sessions.
 
 root_path = os.getcwd()
 browser_bin_path = r'C:\Program Files\Mozilla Firefox\firefox.exe'
@@ -57,38 +58,40 @@ if __name__ == "__main__":
     try:
         print(f'{go.datetime_now()} Start new instance')
         with webdriver.Firefox(service=service, options=options) as driver:
-
             wait = WebDriverWait(driver, wait_timeout)
+
             while True:
                 try:
-                    print(f'{go.datetime_now()} Connecting to: http://{urlhost}/')
-                    driver.get(f"http://{urlhost}/")
-
-                    # Relogin every start of capture session
                     while True:
-                        # Login page
-                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button')))
-                        driver.find_element('id', 'username').send_keys(go.config['CCTV_GLOBAL_USERNAME_URLENCODED'])
-                        driver.find_element('id', 'password').send_keys(go.config['CCTV_GLOBAL_PASSWORD'])
-                        driver.find_element('xpath', '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button').click()    
-                        print(f'{go.datetime_now()} Login success at {urlhost}')
-
-                        # Capture button
-                        print(f'{go.datetime_now()} Capturing frames at {urlhost}...')
-                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div[2]/div/div[2]/span/button[3]')))
-                        for _ in trange(capture_per_session):
+                        print(f'{go.datetime_now()} Connecting to: http://{urlhost}/')
+                        driver.get(f"http://{urlhost}/")
+                        for _ in browser_ttl:
+                            # Relogin in every start of the capture session                       
+                            # Login page
+                            wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button')))
+                            driver.find_element('id', 'username').send_keys(go.config['CCTV_GLOBAL_USERNAME_URLENCODED'])
+                            driver.find_element('id', 'password').send_keys(go.config['CCTV_GLOBAL_PASSWORD'])
+                            driver.find_element('xpath', '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button').click()    
+                            print(f'{go.datetime_now()} Login success at {urlhost}')
+    
+                            # Capture button
+                            print(f'{go.datetime_now()} Capturing frames at {urlhost}...')
                             wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div[2]/div/div[2]/span/button[3]')))
-                            driver.find_element('xpath', '/html/body/div[4]/div[2]/div/div[2]/span/button[3]').click()
-                            time.sleep(capture_interval)
-
-                        # Logout session
-                        # Logout button on main frame
-                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[2]/div[5]')))
-                        driver.find_element('xpath', '/html/body/div[2]/div/div[2]/div[5]').click()
-                        # Popup confirmation
-                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]')))
-                        driver.find_element('xpath', '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]').click()
-                        print(f'{go.datetime_now()} End of capture session. Reloggin...')
+                            for _ in trange(capture_per_session):
+                                wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div[2]/div/div[2]/span/button[3]')))
+                                driver.find_element('xpath', '/html/body/div[4]/div[2]/div/div[2]/span/button[3]').click()
+                                time.sleep(capture_interval)
+    
+                            # Logout session
+                            # Logout button on main frame
+                            wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[2]/div[5]')))
+                            driver.find_element('xpath', '/html/body/div[2]/div/div[2]/div[5]').click()
+                            # Popup confirmation
+                            wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]')))
+                            driver.find_element('xpath', '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]').click()
+                            print(f'{go.datetime_now()} End of capture session. Reloggin...')
+                        # Closing & relaunching driver every `browser_ttl` times
+                        driver.close()
                 except TimeoutException:
                     print(f'{go.datetime_now()} webcapture.py -u "{urlhost}" Request timeout. Wait for {wait_timeout}s.')
                     time.sleep(wait_timeout)
