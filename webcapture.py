@@ -23,10 +23,10 @@ from selenium.common.exceptions import WebDriverException
 go = GlobalOperations()
 
 capture_interval = 0.7 #second(s)
-live_for = 15 #second(s), server lived for
+live_for = 240 #second(s), server lived for
 capture_per_session = int(live_for / capture_interval)
 wait_timeout = 20 #second(s)
-browser_ttl = 2 # browser time to live. Quit and restart browser after n number of sessions.
+browser_ttl = 50 # browser time to live. Quit and restart browser after n number of sessions.
 
 root_path = os.getcwd()
 browser_bin_path = r'C:\Program Files\Mozilla Firefox\firefox.exe'
@@ -61,7 +61,6 @@ if __name__ == "__main__":
             try:
                 while True:
                     driver = webdriver.Firefox(service=service, options=options)
-                    # with webdriver.Firefox(service=service, options=options) as driver:
                     wait = WebDriverWait(driver, wait_timeout)
                     
                     print(f'{go.datetime_now()} Opening new browser window. Browser time to live: {browser_ttl}')
@@ -93,9 +92,9 @@ if __name__ == "__main__":
                         wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]')))
                         driver.find_element('xpath', '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]').click()
                         print(f'{go.datetime_now()} End of capture session. Reloggin...')
+                    
                     # Closing & relaunching driver every `browser_ttl` times
                     print(f'{go.datetime_now()} End of browser time to live. Closing browser window and launch again.')
-                    
                     driver.close()
             except TimeoutException:
                 print(f'{go.datetime_now()} webcapture.py -u "{urlhost}" Request timeout. Wait for {wait_timeout}s.')
