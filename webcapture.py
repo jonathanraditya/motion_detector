@@ -63,9 +63,11 @@ if __name__ == "__main__":
             while True:
                 try:
                     while True:
+                        print(f'{go.datetime_now()} Opening new browser window. Browser time to live: {browser_ttl}')
                         print(f'{go.datetime_now()} Connecting to: http://{urlhost}/')
                         driver.get(f"http://{urlhost}/")
-                        for _ in browser_ttl:
+                        for b in trange(browser_ttl):
+                            print(f'{go.datetime_now()} {b+1}/{browser_ttl} browser cycle.')
                             # Relogin in every start of the capture session                       
                             # Login page
                             wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button')))
@@ -91,6 +93,7 @@ if __name__ == "__main__":
                             driver.find_element('xpath', '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]').click()
                             print(f'{go.datetime_now()} End of capture session. Reloggin...')
                         # Closing & relaunching driver every `browser_ttl` times
+                        print(f'{go.datetime_now()} End of browser time to live. Closing browser window and launch again.')
                         driver.close()
                 except TimeoutException:
                     print(f'{go.datetime_now()} webcapture.py -u "{urlhost}" Request timeout. Wait for {wait_timeout}s.')
