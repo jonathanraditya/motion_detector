@@ -47,6 +47,9 @@ if __name__ == '__main__':
                         print(f'{go.datetime_now()} Copying: {target_file_path}')
                     except FileNotFoundError:
                         print(f'{go.datetime_now()} Failed file not found: {target_file_path}')
+                    except OSError:
+                        print(f'{go.datetime_now()} Copy or remove file has failed. Leaving the condition as it is: {target_file_path}')
+                        
 
                 cleanup_counter += 1
             print(f'{go.datetime_now()} Google Drive cleanup finished. {cleanup_counter} records cleaned.')
