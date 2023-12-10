@@ -65,9 +65,10 @@ if __name__ == "__main__":
                     
                     print(f'{go.datetime_now()} Opening new browser window. Browser time to live: {browser_ttl}')
                     print(f'{go.datetime_now()} Connecting to: http://{urlhost}/')
-                    driver.get(f"http://{urlhost}/")
+                    
                     for b in range(browser_ttl):
                         try:
+                            driver.get(f"http://{urlhost}/")
                             print(f'{go.datetime_now()} {b+1}/{browser_ttl} browser cycle.')
                             # Relogin in every start of the capture session                       
                             # Login page
