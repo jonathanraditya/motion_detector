@@ -26,7 +26,7 @@ if __name__ == '__main__':
     target_path = 'D:\\cctv_proof'
     os.makedirs(target_path, exist_ok=True)
     
-    keep_records_for = 120 # day(s)
+    keep_records_for = 10 # day(s)
 
     try:
         while True:
@@ -45,13 +45,12 @@ if __name__ == '__main__':
                         shutil.copy(source_file_path, target_file_path)
                         os.remove(source_file_path)
                         print(f'{go.datetime_now()} Copying: {target_file_path}')
+                        cleanup_counter += 1
                     except FileNotFoundError:
                         print(f'{go.datetime_now()} Failed file not found: {target_file_path}')
                     except OSError:
                         print(f'{go.datetime_now()} Copy or remove file has failed. Leaving the condition as it is: {target_file_path}')
-                        
-
-                cleanup_counter += 1
+                
             print(f'{go.datetime_now()} Google Drive cleanup finished. {cleanup_counter} records cleaned.')
 
             for _ in range(60*60):
