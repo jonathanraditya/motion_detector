@@ -67,31 +67,38 @@ if __name__ == "__main__":
                     print(f'{go.datetime_now()} Connecting to: http://{urlhost}/')
                     driver.get(f"http://{urlhost}/")
                     for b in range(browser_ttl):
-                        print(f'{go.datetime_now()} {b+1}/{browser_ttl} browser cycle.')
-                        # Relogin in every start of the capture session                       
-                        # Login page
-                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button')))
-                        driver.find_element('id', 'username').send_keys(go.config['CCTV_GLOBAL_USERNAME_URLENCODED'])
-                        driver.find_element('id', 'password').send_keys(go.config['CCTV_GLOBAL_PASSWORD'])
-                        driver.find_element('xpath', '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button').click()    
-                        print(f'{go.datetime_now()} Login success at {urlhost}')
-
-                        # Capture button
-                        print(f'{go.datetime_now()} Capturing frames at {urlhost}...')
-                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div[2]/div/div[2]/span/button[3]')))
-                        for _ in trange(capture_per_session):
+                        try:
+                            print(f'{go.datetime_now()} {b+1}/{browser_ttl} browser cycle.')
+                            # Relogin in every start of the capture session                       
+                            # Login page
+                            wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button')))
+                            driver.find_element('id', 'username').send_keys(go.config['CCTV_GLOBAL_USERNAME_URLENCODED'])
+                            driver.find_element('id', 'password').send_keys(go.config['CCTV_GLOBAL_PASSWORD'])
+                            driver.find_element('xpath', '/html/body/div[2]/table/tbody/tr/td[2]/div/div[5]/button').click()    
+                            print(f'{go.datetime_now()} Login success at {urlhost}')
+    
+                            # Capture button
+                            print(f'{go.datetime_now()} Capturing frames at {urlhost}...')
                             wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div[2]/div/div[2]/span/button[3]')))
-                            driver.find_element('xpath', '/html/body/div[4]/div[2]/div/div[2]/span/button[3]').click()
-                            time.sleep(capture_interval)
+                            for _ in trange(capture_per_session):
+                                wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div[2]/div/div[2]/span/button[3]')))
+                                driver.find_element('xpath', '/html/body/div[4]/div[2]/div/div[2]/span/button[3]').click()
+                                time.sleep(capture_interval)
+    
+                            # Logout session
+                            # Logout button on main frame
+                            wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[2]/div[5]')))
+                            driver.find_element('xpath', '/html/body/div[2]/div/div[2]/div[5]').click()
+                            # Popup confirmation
+                            wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]')))
+                            driver.find_element('xpath', '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]').click()
+                            print(f'{go.datetime_now()} End of capture session. Reloggin...')
+                        except TimeoutException:
+                            print(f'{go.datetime_now()} webcapture.py -u "{urlhost}" Capture request timeout. Wait for {wait_timeout}s.')
+                            time.sleep(wait_timeout)
+                        except (ElementClickInterceptedException, WebDriverException):
+                            print(f'{go.datetime_now()} webcapture.py -u "{urlhost}" Capture failed. ElementClickInterceptedException or WebDriverException. Wait for {wait_timeout}s and retrying from login page.')
 
-                        # Logout session
-                        # Logout button on main frame
-                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[2]/div[5]')))
-                        driver.find_element('xpath', '/html/body/div[2]/div/div[2]/div[5]').click()
-                        # Popup confirmation
-                        wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]')))
-                        driver.find_element('xpath', '/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/button[1]').click()
-                        print(f'{go.datetime_now()} End of capture session. Reloggin...')
                     
                     # Closing & relaunching driver every `browser_ttl` times
                     print(f'{go.datetime_now()} End of browser time to live. Closing browser window and launch again.')
@@ -99,6 +106,10 @@ if __name__ == "__main__":
             except TimeoutException:
                 print(f'{go.datetime_now()} webcapture.py -u "{urlhost}" Request timeout. Wait for {wait_timeout}s.')
                 time.sleep(wait_timeout)
+                try:
+                    driver.close()
+                except:
+                    print('Attempt to close the driver has failed.')
             except (ElementClickInterceptedException, WebDriverException):
                 # WebDriverException:
                 # Connection to the server was reset while the page was loading
@@ -109,6 +120,10 @@ if __name__ == "__main__":
                 #   class="layout-center-inner ui-layout-pane ui-layout-pane-center ng-scope"> 
                 #   obscures it
                 print(f'{go.datetime_now()} webcapture.py -u "{urlhost}" ElementClickInterceptedException or WebDriverException. Wait for {wait_timeout}s and retrying from login page.')
+                try:
+                    driver.close()
+                except:
+                    print('Attempt to close the driver has failed.')
 
     except KeyboardInterrupt:
         print(f'{go.datetime_now()} Stopping Hikvision capture server at {urlhost}')
