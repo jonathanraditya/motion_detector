@@ -28,6 +28,8 @@ capture_per_session = int(live_for / capture_interval)
 wait_timeout = 20 #second(s)
 browser_ttl = 50 # browser time to live. Quit and restart browser after n number of sessions.
 
+options, service, driver, wait = None, None, None, None
+
 root_path = os.getcwd()
 browser_bin_path = r'C:\Program Files\Mozilla Firefox\firefox.exe'
 bin_path = os.path.join(root_path, 'bin')
