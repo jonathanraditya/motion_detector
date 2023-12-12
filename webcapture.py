@@ -33,10 +33,6 @@ browser_bin_path = r'C:\Program Files\Mozilla Firefox\firefox.exe'
 bin_path = os.path.join(root_path, 'bin')
 driver_bin_path = os.path.join(bin_path, 'geckodriver.exe')
 
-options = Options()
-options.binary_location = browser_bin_path
-service = Service(executable_path=driver_bin_path, log_path=os.devnull)
-
 def main(argv):
     opts, args = getopt.getopt(argv, "hu:")
     for opt, arg in opts:
@@ -48,8 +44,7 @@ def main(argv):
         else:
             print(f'{go.datetime_now()} Please specify urlhost parameter first')
             sys.exit()
-            
-
+        
 # Serve forever
 if __name__ == "__main__":
     urlhost = main(sys.argv[1:])
@@ -60,6 +55,12 @@ if __name__ == "__main__":
         while True:
             try:
                 while True:
+                    # Make sure to clean previous instance
+                    go.delete(options, service, driver, wait)
+
+                    options = Options()
+                    options.binary_location = browser_bin_path
+                    service = Service(executable_path=driver_bin_path, log_path=os.devnull)
                     driver = webdriver.Firefox(service=service, options=options)
                     wait = WebDriverWait(driver, wait_timeout)
                     
@@ -103,28 +104,11 @@ if __name__ == "__main__":
                     
                     # Closing & relaunching driver every `browser_ttl` times
                     print(f'{go.datetime_now()} End of browser time to live. Closing browser window and launch again.')
-                    driver.close()
             except TimeoutException:
                 print(f'{go.datetime_now()} webcapture.py -u "{urlhost}" Request timeout. Wait for {wait_timeout}s.')
                 time.sleep(wait_timeout)
-                try:
-                    driver.close()
-                except:
-                    print('Attempt to close the driver has failed.')
             except (ElementClickInterceptedException, WebDriverException):
-                # WebDriverException:
-                # Connection to the server was reset while the page was loading
-                #
-                # ElementClickInterceptedException:
-                # Element <div class="exit"> is not clickable at point (642,153) 
-                #   because another element <div id="plugin" 
-                #   class="layout-center-inner ui-layout-pane ui-layout-pane-center ng-scope"> 
-                #   obscures it
                 print(f'{go.datetime_now()} webcapture.py -u "{urlhost}" ElementClickInterceptedException or WebDriverException. Wait for {wait_timeout}s and retrying from login page.')
-                try:
-                    driver.close()
-                except:
-                    print('Attempt to close the driver has failed.')
 
     except KeyboardInterrupt:
         print(f'{go.datetime_now()} Stopping Hikvision capture server at {urlhost}')

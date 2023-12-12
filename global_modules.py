@@ -29,6 +29,14 @@ class GlobalOperations:
         else:
             return None
 
+    def delete(self, *objs):
+        '''is a simple try/except tree to delete instance. Simplified to one-liner code.'''
+        for obj in objs:
+            try:
+                del obj
+            except:
+                pass
+
 class Sqlite(GlobalOperations):
     '''Version 1.'''
     def __init__(self, *args, **kwargs):
