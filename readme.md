@@ -155,7 +155,7 @@ DEPLOYMENT:
 - Make sure geckodriver.exe exist in controller/bin/geckodriver.exe
 - create env and update dependencies from /conda_env
 
-Command to run:
+Command to run with Anaconda terminal:
 (is an environment to select, `conda activate environment`)
 - python webcapture.py -u "192.168.0.170" (selenium)
 - python webcapture.py -u "192.168.0.207" (selenium)
@@ -175,4 +175,7 @@ Command to run:
 - python notifications.py -l "garden" (base)
 - python proof.py (base)
 - python cleanup.py (base)
+- python cleanup_gdrive.py (base)
+- clean_firefox_instances.cmd
+
 
