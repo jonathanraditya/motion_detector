@@ -176,6 +176,6 @@ Command to run with Anaconda terminal:
 - python proof.py (base)
 - python cleanup.py (base)
 - python cleanup_gdrive.py (base)
-- clean_firefox_instances.cmd
+- clean_firefox_instances.bat
 
 
