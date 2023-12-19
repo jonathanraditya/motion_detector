@@ -15,5 +15,3 @@ sandbox.py
 .env
 telegram_get_updates.ipynb
 telegram_get_updates.py
-!db/notifications_c.db
-!db/movement_signal_c.db
