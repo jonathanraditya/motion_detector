@@ -94,7 +94,7 @@ class Sqlite(GlobalOperations):
         else:
             print('Please initialize connection and table name first.')
             
-class ](GlobalOperations):
+class Sqlite_v2(GlobalOperations):
     '''Version 2
     This version is slightly different with vibration_sensor/server version,
             especially in insert_value function.'''
