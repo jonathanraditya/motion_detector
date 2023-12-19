@@ -9,10 +9,11 @@ import random
 import time
 import psutil
 from dotenv import dotenv_values
-config = dotenv_values('.env')
+config = dotenv_values(os.path.join(os.getcwd(), '.env'))
 
 class GlobalOperations:  
-    config = dotenv_values('.env')
+    config = dotenv_values(os.path.join(os.getcwd(), '.env'))
+    cwd = os.getcwd()
     def datetime_now(self):
         tz = pytz.timezone('Asia/Jakarta')
         return datetime.now(tz)
@@ -93,7 +94,7 @@ class Sqlite(GlobalOperations):
         else:
             print('Please initialize connection and table name first.')
             
-class Sqlite_v2(GlobalOperations):
+class ](GlobalOperations):
     '''Version 2
     This version is slightly different with vibration_sensor/server version,
             especially in insert_value function.'''
